@@ -21,3 +21,15 @@ Do not commit private, restricted, or unlicensed recordings, transcripts, model 
 ## License
 
 No license has been selected yet. Until one is added, all rights are reserved by default.
+
+## Data preparation
+
+A local Python CLI now prepares a provenance-preserving, multi-speaker corpus for
+Khalkha language adaptation. See [the pipeline guide](docs/data-pipeline.md) and
+[example configuration](configs/example.json) for acquisition, validation,
+reproducible splits, reports, and optional Qwen single-speaker export.
+
+Run `python3 -m hojil_data --help` or `python3 -m unittest discover -s tests -v`.
+No datasets or model weights are downloaded implicitly. A multilingual
+language-adaptation trainer is still required; the official single-speaker Qwen
+trainer is only an optional later integration.
