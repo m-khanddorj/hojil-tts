@@ -1,0 +1,11 @@
+cffi==2.1.1
+imageio-ffmpeg==0.6.0
+numpy==2.5.4
+pyarrow==26.0.0
+pycparser==3.11
+soundfile==0.14.0
+typing_extensions==4.16.0
+flatbuffers==25.12.19
+onnxruntime==1.31.0
+packaging==26.3
+protobuf==7.36.2

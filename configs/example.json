@@ -1,0 +1,36 @@
+{
+  "seed": 2026,
+  "speaker_disjoint": true,
+  "audio_processing": {
+    "denoise": {"enabled": true, "reduction_db": 6.0, "noise_floor_db": -50.0},
+    "trim": {"enabled": false, "threshold_dbfs": -45.0, "window_ms": 20.0, "min_silence_ms": 200.0, "padding_ms": 150.0},
+    "vad": {"enabled": true, "model": "/absolute/external/models/cleaning/silero_vad.onnx", "model_sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3", "min_silence_ms": 500.0, "padding_ms": 250.0},
+    "quality": {"enabled": true, "model": "/absolute/external/models/cleaning/dnsmos.onnx", "model_sha256": "269fbebdb513aa23cddfbb593542ecc540284a91849ac50516870e1ac78f6edd"}
+  },
+  "splits": {"validation": 0.05, "test": 0.05},
+  "filters": {"min_duration": 1.0, "max_duration": 20.0, "min_rms_dbfs": -45.0, "max_clipping_fraction": 0.01, "max_silence_fraction": 0.8, "min_cyrillic_fraction": 0.6, "max_chars": 500},
+  "sources": [
+    {
+      "id": "cv27", "kind": "common_voice", "family": "common_voice", "revision": "27.0",
+      "source_url": "https://mozilladatacollective.com/datasets/cmu5z0n5x00fdo10709hn7u8m",
+      "license": "CC0-1.0; preserve separate access terms",
+      "path": "/absolute/external/data/raw/cv27/cv-corpus-27.0-2026-09-11/mn",
+      "archive": "/absolute/external/downloads/cv27-mn.tar.gz",
+      "archive_sha256": "REPLACE_WITH_SHA256_OF_AUTHORIZED_ARCHIVE"
+    },
+    {
+      "id": "fleurs", "kind": "fleurs", "family": "fleurs",
+      "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+      "source_url": "https://huggingface.co/datasets/google/fleurs", "license": "CC-BY-4.0",
+      "path": "/absolute/external/data/raw/fleurs"
+    },
+    {
+      "id": "mbspeech", "kind": "mbspeech", "family": "mbspeech", "enabled": false,
+      "revision": "REPLACE_WITH_VERIFIED_SOURCE_REVISION",
+      "source_url": "https://huggingface.co/datasets/btsee/mbspeech_mn",
+      "license": "Publisher MIT declaration; underlying text/recording rights unresolved",
+      "rights_clearance": null,
+      "path": "/absolute/external/data/raw/mbspeech", "manifest": "metadata.jsonl"
+    }
+  ]
+}

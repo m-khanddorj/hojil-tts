@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hojil-data"
+version = "0.1.0"
+description = "Reproducible Khalkha speech data preparation"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=16,<27"]
+audio = ["imageio-ffmpeg==0.6.0", "soundfile>=0.13,<0.15"]
+neural = ["onnxruntime>=1.20,<2", "numpy>=1.26,<3"]
+asr = ["faster-whisper>=1.1,<2"]
+
+[project.scripts]
+hojil-data = "data.cli:main"
+
+[tool.setuptools]
+packages = ["data"]

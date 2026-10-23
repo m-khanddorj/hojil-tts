@@ -1,0 +1,36 @@
+name: Data preparation
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+        profile: [core, audio]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install package and build tool
+        run: python -m pip install -e . build
+      - name: Install optional audio dependencies
+        if: matrix.profile == 'audio'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install -e '.[audio,parquet,neural]'
+      - name: Check commands and tests
+        run: |
+          python -m data --help
+          hojil-data --help
+          python -m unittest discover -s tests -v
+      - name: Build wheel
+        run: python -m build --wheel
