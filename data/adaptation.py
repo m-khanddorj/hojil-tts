@@ -4,10 +4,23 @@ This is deliberately not advertised as the stock single-speaker SFT interface.
 Unknown identities remain usable corpus evidence, with unresolved conditioning.
 """
 from collections import Counter
+import hashlib
 from pathlib import Path
+import wave
 
-from .audio import inspect
 from .io import digest, fresh_dir, read_rows, write_json, write_rows
+
+
+def pcm_hash(path):
+    """Verify canonical WAV structure and hash PCM without recomputing metrics."""
+    with wave.open(str(path), 'rb') as audio:
+        if (audio.getnchannels(), audio.getsampwidth(), audio.getframerate()) != (1, 2, 24000):
+            raise ValueError(f'Unexpected audio format: {path}')
+        expected = audio.getnframes() * 2
+        raw = audio.readframes(audio.getnframes())
+    if len(raw) != expected or not raw:
+        raise ValueError(f'Truncated or empty audio: {path}')
+    return hashlib.sha256(raw).hexdigest()
 
 
 def export_adaptation(manifest, output):
@@ -20,7 +33,7 @@ def export_adaptation(manifest, output):
         if row['split'] not in {'train', 'validation', 'test'}:
             raise ValueError('Unexpected canonical split')
         audio = str(Path(row['audio']).resolve())
-        if inspect(audio)['pcm_sha256'] != row['pcm_sha256']:
+        if pcm_hash(audio) != row['pcm_sha256']:
             raise ValueError('Canonical audio changed since preparation')
         reference = row.get('ref_audio')
         speaker = row.get('speaker_id')

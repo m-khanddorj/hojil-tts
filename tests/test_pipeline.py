@@ -10,12 +10,12 @@ import wave
 from pathlib import Path
 from unittest.mock import patch
 
-from hojil_data.adaptation import export_adaptation
-from hojil_data.cli import main
-from hojil_data.io import digest, extract, external, read_rows, write_json, write_rows
-from hojil_data.pipeline import normalize, prepare, split_records
-from hojil_data.qwen import encode, export, validate_codes
-from hojil_data.sources import acquire, records, import_parquet
+from data.adaptation import export_adaptation
+from data.cli import main
+from data.io import digest, extract, external, read_rows, write_json, write_rows
+from data.pipeline import normalize, prepare, split_records
+from data.qwen import encode, export, validate_codes
+from data.sources import acquire, records, import_parquet
 
 
 def wav(path, frequency=220, duration=1.1, amplitude=8000, rate=24000):
@@ -85,6 +85,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(report['accepted'], 1)
         self.assertEqual(report['reasons'], {'heldout_leakage': 2})
         self.assertEqual(next(read_rows(out / 'manifest.jsonl'))['split'], 'test')
+        self.assertEqual(len(list((out / 'audio').glob('*.wav'))), 3)
 
     def test_pcm_duplicates_prefer_test(self):
         rows = [self.row('train'), self.row('test', split='test')]
@@ -112,7 +113,7 @@ class PipelineTests(unittest.TestCase):
 
     def test_missing_decoder_fails_run(self):
         row = self.row('a', rate=16000)
-        with patch('hojil_data.audio.ffmpeg_executable', side_effect=RuntimeError('missing')), self.assertRaises(RuntimeError):
+        with patch('data.audio.ffmpeg_executable', side_effect=RuntimeError('missing')), self.assertRaises(RuntimeError):
             prepare(self.config([row]), self.root / 'out')
 
     def test_safe_archives_and_external_output(self):
@@ -130,9 +131,9 @@ class PipelineTests(unittest.TestCase):
     def test_common_voice_reserves_official_splits(self):
         self.source.update(kind='common_voice', revision='27.0')
         header = 'client_id\tpath\tsentence\n'
-        (self.raw / 'test.tsv').write_text(header + 'a\ta.wav\tСайн уу\n')
-        (self.raw / 'dev.tsv').write_text(header + 'b\tb.wav\tӨдөр\n')
-        (self.raw / 'validated.tsv').write_text(header + 'a\ta.wav\tСайн уу\n' + 'c\tc.wav\tҮүл\n')
+        (self.raw / 'test.tsv').write_text(header + 'a\ta.wav\tСайн уу\n', encoding='utf-8')
+        (self.raw / 'dev.tsv').write_text(header + 'b\tb.wav\tӨдөр\n', encoding='utf-8')
+        (self.raw / 'validated.tsv').write_text(header + 'a\ta.wav\tСайн уу\n' + 'c\tc.wav\tҮүл\n', encoding='utf-8')
         result = list(records(self.source))
         self.assertEqual([(r['original_clip_id'], r['source_split']) for r in result],
                          [('a.wav', 'test'), ('b.wav', 'validation'), ('c.wav', 'train')])
@@ -142,7 +143,7 @@ class PipelineTests(unittest.TestCase):
         for split in ('train', 'dev', 'test'):
             p = self.raw / 'audio' / split / split / 'file.wav'
             wav(p)
-            (self.raw / f'{split}.tsv').write_text('1\tfile.wav\tСайн уу?\tсайн уу\tс а й н\t26400\tMALE\n')
+            (self.raw / f'{split}.tsv').write_text('1\tfile.wav\tСайн уу?\tсайн уу\tс а й н\t26400\tMALE\n', encoding='utf-8')
         result = list(records(self.source))
         self.assertEqual([r['source_split'] for r in result], ['train', 'validation', 'test'])
         self.assertTrue(all(r['speaker_id'] is None for r in result))
@@ -158,7 +159,19 @@ class PipelineTests(unittest.TestCase):
         for i in range(20):
             self.assertEqual(len({r['split'] for r in a if r['speaker_id'] == str(i)}), 1)
 
-
+    def test_fleurs_literal_quotes_do_not_merge_or_escape_records(self):
+        self.source.update(kind='fleurs', revision='a'*40)
+        for split in ('train', 'dev', 'test'):
+            for name in ('one.wav', 'two.wav'):
+                wav(self.raw/'audio'/split/name)
+            (self.raw/f'{split}.tsv').write_text(
+                '1\tone.wav\t"Сайн уу?\tсайн уу\tс а й н\t26400\tMALE\n'
+                '2\ttwo.wav\tТэр "Өдөр" гэв.\tтэр өдөр гэв\tт э р\t26400\tFEMALE\n',
+                encoding='utf-8')
+        result = list(records(self.source))
+        self.assertEqual(len(result), 6)
+        self.assertEqual(result[0]['original_text'], '"Сайн уу?')
+        self.assertEqual(result[1]['original_text'], 'Тэр "Өдөр" гэв.')
     def test_audio_duplicate_does_not_hide_speaker_leakage(self):
         rows = [self.row('test', split='test', speaker='A'),
                 self.row('duplicate', text='Өөр үг.', speaker='B'),
@@ -170,7 +183,7 @@ class PipelineTests(unittest.TestCase):
     def test_bad_audio_and_invalid_filters(self):
         row = self.row('bad')
         (self.raw / row['audio']).write_bytes(b'not audio')
-        with patch('hojil_data.pipeline.convert', side_effect=wave.Error('bad')):
+        with patch('data.pipeline.convert', side_effect=wave.Error('bad')):
             report = prepare(self.config([row]), self.root / 'out')
         self.assertEqual(report['reasons'], {'audio_decode': 1})
         with self.assertRaises(ValueError):
@@ -202,7 +215,7 @@ class PipelineTests(unittest.TestCase):
                     f.addfile(item)
             else:
                 target.write_text('metadata')
-        with patch('hojil_data.sources.download', side_effect=fake_download):
+        with patch('data.sources.download', side_effect=fake_download):
             acquire(source, self.root / 'acquired')
         self.assertEqual(len(calls), 6)
         self.assertTrue(all('/data/mn_mn/' in url and '/'+('a'*40)+'/' in url for url in calls))
@@ -234,7 +247,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result[0]['source_metadata']['parquet_sha256'], digest(parquet))
 
     def test_download_rejects_credentials_and_signed_inputs(self):
-        from hojil_data.io import download
+        from data.io import download
         for url in ('http://example.com/data', 'https://u:p@example.com/data',
                     'https://example.com/data?token=secret'):
             with self.assertRaises(ValueError):
@@ -242,7 +255,7 @@ class PipelineTests(unittest.TestCase):
         import io
         payload = io.BytesIO(b'short')
         payload.headers = {'Content-Length': '100'}
-        with patch('hojil_data.io.urllib.request.urlopen', return_value=payload):
+        with patch('data.io.urllib.request.urlopen', return_value=payload):
             with self.assertRaisesRegex(ValueError, 'Content-Length mismatch'):
                 download('https://example.com/data', self.root / 'download')
         self.assertFalse((self.root / 'download').exists())
@@ -298,7 +311,7 @@ class PipelineTests(unittest.TestCase):
             else:
                 target.write_text('metadata')
         out = self.root / 'acquired'
-        with patch('hojil_data.sources.download', side_effect=fake_download):
+        with patch('data.sources.download', side_effect=fake_download):
             with self.assertRaises(OSError):
                 acquire(source, out)
             self.assertFalse((out / source['id']).exists())

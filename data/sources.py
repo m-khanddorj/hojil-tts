@@ -124,8 +124,13 @@ def records(s):
                                source_metadata={'up_votes': row.get('up_votes'), 'down_votes': row.get('down_votes')})
     elif s['kind'] == 'fleurs':
         for file, split in [('train', 'train'), ('dev', 'validation'), ('test', 'test')]:
+            paths = {}
+            for path in (root / 'audio' / file).rglob('*'):
+                if path.is_file():
+                    paths.setdefault(path.name, []).append(path)
             with (root / f'{file}.tsv').open(encoding='utf-8', newline='') as f:
-                for row in csv.reader(f, delimiter='\t'):
+                # FLEURS is literal TSV: quotation marks belong to transcripts.
+                for row in csv.reader(f, delimiter='\t', quoting=csv.QUOTE_NONE):
                     if not row:
                         continue
                     if len(row) != 7:
@@ -133,7 +138,7 @@ def records(s):
                     # Archives may contain a split directory or bare filenames.
                     if Path(row[1]).name != row[1] or any(c in row[1] for c in '*?[]'):
                         raise ValueError('FLEURS filename must be a plain basename')
-                    matches = list((root / 'audio' / file).rglob(row[1]))
+                    matches = paths.get(row[1], [])
                     if len(matches) != 1:
                         raise ValueError(f'Expected one FLEURS audio path for {row[1]}')
                     yield base(s, f'{file}/{row[1]}', row[2], matches[0], split,
@@ -172,9 +177,9 @@ def import_parquet(source, inputs, output):
                     raise ValueError('Expected embedded Hugging Face audio.bytes in Parquet')
                 target = out / 'audio' / f'{clip}.wav'
                 target.write_bytes(audio['bytes'])
-                text = row.get('original_sentence') or row.get('sentence') or row.get('text')
+                text = row.get('original_sentence') or row.get('sentence_orig') or row.get('sentence') or row.get('text')
                 if not isinstance(text, str):
-                    raise ValueError('Expected original_sentence, sentence, or text column')
+                    raise ValueError('Expected original_sentence, sentence_orig, sentence, or text column')
                 rows.append(dict(id=clip, audio=str(target.relative_to(out)), text=text,
                                  split=row.get('split', 'unspecified'), speaker_id=row.get('speaker_id'),
                                  metadata={'parquet_sha256': file_hash, 'row': index-1}))

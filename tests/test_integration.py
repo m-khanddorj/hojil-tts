@@ -1,19 +1,26 @@
 """Optional real-codec/Parquet fixtures. Install .[audio,parquet] to run."""
 import importlib.util
 import json
+import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
 from test_pipeline import wav
-from hojil_data.audio import convert, ffmpeg_executable, inspect
-from hojil_data.io import read_rows, write_rows
-from hojil_data.pipeline import prepare
-from hojil_data.sources import import_parquet
-from hojil_data.adaptation import export_adaptation
+from data.audio import convert, ffmpeg_executable, inspect
+from data.io import read_rows, write_rows
+from data.pipeline import prepare
+from data.sources import import_parquet
+from data.adaptation import export_adaptation
 
-HAS_EXTRAS = all(importlib.util.find_spec(m) for m in ('pyarrow', 'soundfile', 'imageio_ffmpeg'))
+try:
+    ffmpeg_executable()
+    HAS_FFMPEG = True
+except RuntimeError:
+    HAS_FFMPEG = False
+HAS_METADATA = bool(shutil.which('ffprobe') or importlib.util.find_spec('soundfile'))
+HAS_EXTRAS = bool(importlib.util.find_spec('pyarrow') and HAS_FFMPEG and HAS_METADATA)
 
 
 @unittest.skipUnless(HAS_EXTRAS, 'Install audio and parquet extras for actual integration tests')
@@ -41,7 +48,8 @@ class RealIntegration(unittest.TestCase):
             parquet = root / 'fixture.parquet'
             pq.write_table(pa.Table.from_pylist([{
                 'audio': {'bytes': mp3.read_bytes(), 'path': 'stereo.mp3'},
-                'original_sentence': 'Өнөөдөр сайхан өдөр.', 'split': 'train', 'speaker_id': 'fixture-voice',
+                'sentence_orig': 'Өнөөдөр сайхан өдөр.', 'sentence_norm': 'өнөөдөр сайхан өдөр',
+                'split': 'train', 'speaker_id': 'fixture-voice',
             }]), parquet)
             import_parquet(source, [parquet], root / 'imported')
             report = prepare({'sources': [source], 'splits': {'test': 0, 'validation': 0}}, root / 'prepared')

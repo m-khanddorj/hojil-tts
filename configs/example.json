@@ -1,6 +1,12 @@
 {
   "seed": 2026,
   "speaker_disjoint": true,
+  "audio_processing": {
+    "denoise": {"enabled": true, "reduction_db": 6.0, "noise_floor_db": -50.0},
+    "trim": {"enabled": false, "threshold_dbfs": -45.0, "window_ms": 20.0, "min_silence_ms": 200.0, "padding_ms": 150.0},
+    "vad": {"enabled": true, "model": "/absolute/external/models/cleaning/silero_vad.onnx", "model_sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3", "min_silence_ms": 500.0, "padding_ms": 250.0},
+    "quality": {"enabled": true, "model": "/absolute/external/models/cleaning/dnsmos.onnx", "model_sha256": "269fbebdb513aa23cddfbb593542ecc540284a91849ac50516870e1ac78f6edd"}
+  },
   "splits": {"validation": 0.05, "test": 0.05},
   "filters": {"min_duration": 1.0, "max_duration": 20.0, "min_rms_dbfs": -45.0, "max_clipping_fraction": 0.01, "max_silence_fraction": 0.8, "min_cyrillic_fraction": 0.6, "max_chars": 500},
   "sources": [

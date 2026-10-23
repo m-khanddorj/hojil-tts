@@ -12,9 +12,11 @@ dependencies = []
 [project.optional-dependencies]
 parquet = ["pyarrow>=16,<27"]
 audio = ["imageio-ffmpeg==0.6.0", "soundfile>=0.13,<0.15"]
+neural = ["onnxruntime>=1.20,<2", "numpy>=1.26,<3"]
+asr = ["faster-whisper>=1.1,<2"]
 
 [project.scripts]
-hojil-data = "hojil_data.cli:main"
+hojil-data = "data.cli:main"
 
-[tool.setuptools.packages.find]
-include = ["hojil_data*"]
+[tool.setuptools]
+packages = ["data"]

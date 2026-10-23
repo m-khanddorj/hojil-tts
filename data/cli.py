@@ -21,6 +21,9 @@ def main(argv=None):
             p.add_argument('--source', required=True)
         if name == 'import-mbspeech':
             p.add_argument('parquet', nargs='+')
+        if name == 'prepare':
+            p.add_argument('--workers', type=int, default=1)
+            p.add_argument('--resume', action='store_true')
     p = sub.add_parser('export-adaptation')
     p.add_argument('--manifest', required=True)
     p.add_argument('--output', required=True)
@@ -36,6 +39,14 @@ def main(argv=None):
     p.add_argument('--batch-size', type=int, default=1)
     p = sub.add_parser('check-codes')
     p.add_argument('--input', required=True)
+    p = sub.add_parser('audit-transcripts')
+    p.add_argument('--manifest', required=True)
+    p.add_argument('--model-dir', required=True)
+    p.add_argument('--output', required=True)
+    p.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
+    p.add_argument('--cer-threshold', type=float, default=.3)
+    p.add_argument('--backend', choices=['faster-whisper', 'whisper-cpp'], default='faster-whisper')
+    p.add_argument('--executable')
     args = parser.parse_args(argv)
     try:
         if hasattr(args, 'config'):
@@ -48,7 +59,11 @@ def main(argv=None):
         if args.command == 'acquire':
             acquire(source, args.output)
         elif args.command == 'prepare':
-            report = prepare(cfg, args.output)
+            if args.workers != 1 or args.resume:
+                from .bulk import prepare_bulk
+                report = prepare_bulk(cfg, args.output, args.workers, args.resume)
+            else:
+                report = prepare(cfg, args.output)
             print(json.dumps({k: report[k] for k in ('accepted', 'rejected', 'accepted_hours', 'reasons')}, indent=2))
         elif args.command == 'import-mbspeech':
             import_parquet(source, args.parquet, args.output)
@@ -58,6 +73,11 @@ def main(argv=None):
             export(args.manifest, args.speaker, args.output)
         elif args.command == 'encode-qwen':
             encode(args.input, args.output, args.tokenizer_model, args.device, args.batch_size)
+        elif args.command == 'audit-transcripts':
+            from .transcripts import audit_transcripts
+            report = audit_transcripts(args.manifest, args.model_dir, args.output, args.device, args.cer_threshold,
+                                       args.backend, args.executable)
+            print(json.dumps({k: report[k] for k in ('rows', 'flagged', 'cer_threshold')}))
         else:
             count = 0
             for row in read_rows(args.input):
