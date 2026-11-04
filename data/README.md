@@ -19,3 +19,8 @@ See the [documentation index](../docs/README.md),
 [source review](../docs/1-open-source-data-review.md),
 [preparation strategy and results](../docs/2-data-preparation.md), and
 [command reference](../docs/data-pipeline.md).
+
+The package also includes local browser tools: `python -m data.playground`
+for CPU speech generation and reference uploads ([setup](../docs/playground.md)),
+and `python -m data.youtube` for reviewed speech intake
+([instructions](../docs/youtube-intake.md)). Both bind only to loopback.

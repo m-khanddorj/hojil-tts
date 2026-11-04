@@ -1,0 +1,5 @@
+# Install CPU torch separately; see docs/playground.md.
+qwen-tts==0.1.1
+transformers==4.57.3
+huggingface-hub==0.36.2
+soundfile==0.14.0

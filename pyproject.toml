@@ -14,9 +14,15 @@ parquet = ["pyarrow>=16,<27"]
 audio = ["imageio-ffmpeg==0.6.0", "soundfile>=0.13,<0.15"]
 neural = ["onnxruntime>=1.20,<2", "numpy>=1.26,<3"]
 asr = ["faster-whisper>=1.1,<2"]
+youtube = ["yt-dlp[default]", "imageio-ffmpeg==0.6.0"]
 
 [project.scripts]
 hojil-data = "data.cli:main"
+hojil-intake = "data.youtube:main"
+hojil-playground = "data.playground:main"
 
 [tool.setuptools]
 packages = ["data"]
+
+[tool.setuptools.package-data]
+data = ["youtube.html", "playground.html"]

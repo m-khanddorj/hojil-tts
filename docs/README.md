@@ -12,7 +12,10 @@ For implementation and reproduction:
 - [Initial pilot](data-pilot-2026-10-22.md): historical small-sample experiments before the full preparation and later corrections.
 - [Preparation code](../data/README.md), [example configuration](../configs/example.json), and [verification dependencies](../requirements-verification.txt).
 
-The current scope is data preparation. Training, deployment, and model-quality
-claims are outside this change. Recordings, model weights, local listening pages,
-and generated reports remain outside Git; the preparation document records their
-measured outcomes and provenance.
+For model evaluation and local inference:
+
+- [Listening findings](listening-findings-2026-11-04.md): human ratings, reference selection, chunking results, seed retries, and limits of the evidence.
+- [CPU playground](playground.md): local generation, version comparison, feedback export, and launch instructions.
+
+Recordings, model weights, local listening pages, and generated reports remain
+outside Git. The documents above summarize their outcomes and provenance.
