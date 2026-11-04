@@ -12,6 +12,11 @@ The original development ASR evaluation measured mean CER 5.62% and WER 11.12% a
 
 ## Run the demo
 
+The latest Alternate 2/full-sentence recordings measured **2.08% CER / 5.83% WER**
+(mean per recording, punctuation removed; 20 development sentences). Pooled rates
+are 2.23% / 6.40%. These are BuzzASR proxies, not human error rates or a general
+under-3% guarantee. See the [measurement and method](docs/latest-evaluation-2026-11-04.md).
+
 The demo server and browser UI are included in this repository. It runs locally on CPU at `http://127.0.0.1:8766`; GitHub hosts the source, not an always-running inference service.
 
 - Generate Mongolian speech, listen, download WAVs, and compare saved versions.
@@ -28,6 +33,10 @@ Follow the [complete setup and launch guide](docs/playground.md) for Python depe
 - Document reproducible training and evaluation workflows.
 
 ## Data and model artifacts
+
+The final checkpoint, inference export and prepared dataset have verified local
+copies independent of Runpod. See [backup scope and recovery](docs/recovery-2026-11-04.md)
+for locations, checks and excluded historical checkpoints.
 
 Do not commit private, restricted, or unlicensed recordings, transcripts, model weights, or other large generated artifacts. Document their source, license, and local or remote storage separately before sharing them.
 

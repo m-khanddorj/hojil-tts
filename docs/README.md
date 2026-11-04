@@ -14,6 +14,10 @@ For implementation and reproduction:
 
 For model evaluation and local inference:
 
+- [Recovery and backup scope](recovery-2026-11-04.md): verified final checkpoint, model, dataset and metadata copies outside Runpod; exclusions and restoration steps.
+
+- [Latest CER/WER measurement](latest-evaluation-2026-11-04.md): current reference/configuration, exact scoring method, parity checks, and selected-retry results.
+
 - [Listening findings](listening-findings-2026-11-04.md): human ratings, reference selection, chunking results, seed retries, and limits of the evidence.
 - [CPU playground](playground.md): local generation, version comparison, feedback export, and launch instructions.
 

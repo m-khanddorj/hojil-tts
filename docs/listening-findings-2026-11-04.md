@@ -54,7 +54,10 @@ Do not automatically pick the lowest ASR score without validating that selection
 against listening. Do not promote seed2028or2029 as globally superior from selected failures.
 
 These findings come from one listener, development data, limited seeds and targeted selection.
-They do not establish population accuracy, a new CER, or production readiness. Naturalness
+The listening ratings alone do not establish population accuracy or a CER. A later
+[ASR measurement](latest-evaluation-2026-11-04.md) of the 20 original full sentences
+gave 2.08% mean CER and 5.83% mean WER without punctuation; this does not establish
+production readiness. Naturalness
 was not rescored on the seed retries. CPU inference may differ from the evaluated GPU runs.
 
 ## Evidence location
