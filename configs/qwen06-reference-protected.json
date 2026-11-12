@@ -1,0 +1,28 @@
+{
+  "output": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-protected-pilot",
+  "base": "C:/Users/Khan/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-0.6B-Base/snapshots/5d83992436eae1d760afd27aff78a71d676296fc",
+  "adapted": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/fresh-fp32-epoch2/merged-model",
+  "backup": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1beb0-7b7b-7f73-993e-71ad9a8eefd3/hojil-17b-recovery",
+  "features": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1beb0-7b7b-7f73-993e-71ad9a8eefd3/qwen06-cv27-full/features",
+  "validation_cache": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/fresh-fp32-epoch2/validation-features.pt",
+  "custom_protocol": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-half-blend/protocol.json",
+  "asr": "C:/Users/Khan/Documents/ChatGPT/gerel-videos/output/buzzasr-mongolian",
+  "numba_cache": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/numba",
+  "tmp": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/test-tmp",
+  "seed": 2026,
+  "rank": 16,
+  "dropout": 0.05,
+  "updates": 88,
+  "checkpoints": [22, 44, 66, 88],
+  "eval_every": 22,
+  "clips_per_update": 16,
+  "start_epoch": 2,
+  "peak_lr": 0.00005,
+  "end_lr": 0.00001,
+  "warmup_updates": 8,
+  "frame_limit": 195,
+  "token_limit": 1024,
+  "voice_patience": 2,
+  "max_clip_cosine_drop": 0.005
+}
+

@@ -1,0 +1,10 @@
+# Install a CUDA-enabled Torch build appropriate for the GPU separately.
+# The verified local environment used torch/torchaudio 2.8.0+cu128.
+torch==2.8.0
+torchaudio==2.8.0
+qwen-tts==0.1.1
+transformers==4.57.3
+peft==0.21.2
+soundfile>=0.13,<0.15
+numpy>=1.26,<3
+safetensors>=0.6,<1

@@ -31,6 +31,8 @@ jobs:
         run: |
           python -m data --help
           hojil-data --help
-          python -m unittest discover -s tests -v
+          python scripts/run_ci_tests.py --lane data
       - name: Build wheel
         run: python -m build --wheel
+      - name: Check isolated wheel imports and assets
+        run: python scripts/check_wheel.py dist

@@ -1,0 +1,35 @@
+name: Portable training tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU training dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch==2.8.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . -r requirements-training.txt
+          python -m pip check
+      - name: Verify CPU backend and run portable training tests
+        env:
+          CUDA_VISIBLE_DEVICES: ''
+          HF_HUB_OFFLINE: '1'
+          TRANSFORMERS_OFFLINE: '1'
+          NUMBA_DISABLE_JIT: '1'
+          HF_HOME: ${{ runner.temp }}/huggingface
+          NUMBA_CACHE_DIR: ${{ runner.temp }}/numba
+        run: |
+          python -c "import torch; assert torch.version.cuda is None, torch.__version__; print('CPU Torch:', torch.__version__)"
+          python scripts/run_ci_tests.py --lane training

@@ -22,7 +22,7 @@ hojil-intake = "data.youtube:main"
 hojil-playground = "data.playground:main"
 
 [tool.setuptools]
-packages = ["data"]
+packages = ["data", "training", "scripts"]
 
 [tool.setuptools.package-data]
 data = ["youtube.html", "playground.html"]

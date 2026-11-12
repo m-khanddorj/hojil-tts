@@ -1,0 +1,449 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-12",
+  "title": "Matched listening examples from existing verified recordings",
+  "goal_achieved": false,
+  "global_model_promoted": false,
+  "new_generation": false,
+  "audio_in_git": false,
+  "units": {
+    "cer": "ratio",
+    "wer": "ratio",
+    "cosine": "individual original-reference internal embedding cosine; not speaker-macro group score"
+  },
+  "groups": [
+    {
+      "id": "reference",
+      "title": "Your reference and the requested checkpoint 8 example",
+      "selection_rule": "The supplied reference file unchanged, plus the exact broader-checkpoint8 clip explicitly requested by the user; not selected or promoted as a new best.",
+      "matched": false,
+      "note": "Compare the supplied reference with the requested broader checkpoint 8 sample. They speak different text. The 1.108647% CER is pooled over all 16 custom recordings; this individual clip has 0% CER and cosine 0.984067. The checkpoint did not qualify in both groups."
+    },
+    {
+      "id": "historical-match",
+      "title": "Base vs full adaptation vs halfway voice",
+      "selection_rule": "First text in the existing registered three-text comparison, case001 and seed 2026; all three policies retained.",
+      "matched": true,
+      "panel_id": "historical_custom3_seed2026",
+      "note": "Same text, reference and seed within this group. Selected by original order, not clip quality. User preferred the base/halfway voice; this is not a blinded listening study."
+    },
+    {
+      "id": "masked-fixed",
+      "title": "The same fixed example through supervised retraining",
+      "selection_rule": "First custom case in the preregistered 80-recording calibration panel at seed 2026; checkpoints 0, 8, 16 and 32 all retained.",
+      "matched": true,
+      "panel_id": "calibration80",
+      "note": "The four clips share text, reference and seed. Individual pronunciation/voice tradeoffs do not override complete group results; none of these checkpoints qualified in both groups. Checkpoints 0 and 8 produced byte-identical audio for this fixed example."
+    }
+  ],
+  "clips": [
+    {
+      "id": "supplied-reference",
+      "group_id": "reference",
+      "label": "Your original reference recording",
+      "kind": "human_reference",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/10/01a1c49d-d4b6-78b2-89ab-baeed81a18ec/hojil-reference/reference.wav",
+      "bundle_filename": "supplied-reference.wav",
+      "audio_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "text": "Энэ өдрийг тэрээр тэсэн ядан хүлээжээ.",
+      "seed": null,
+      "step": null,
+      "cer": null,
+      "wer": null,
+      "cosine": null,
+      "hypothesis": null,
+      "terminated": null,
+      "source_ids": [
+        "historical_protocol"
+      ],
+      "metric_scope": "Reference input; no synthetic-output quality score assigned",
+      "seconds": 3.8,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "historical-base",
+      "group_id": "historical-match",
+      "label": "Original base model",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-voice-diagnostic/base_full_reference.wav",
+      "bundle_filename": "historical-base.wav",
+      "audio_sha256": "30200bbae3dcdbc8a4e4d013dc1711401b8be3ec154ce052101617fc99c1535e",
+      "case": "001",
+      "text": "Ингээд манайх Жаргалантын сангийн аж ахуйд суух болов.",
+      "seed": 2026,
+      "step": null,
+      "cer": 0.24528301886792453,
+      "wer": 0.875,
+      "cosine": 0.9861574769020081,
+      "score": {
+        "cer": 0.24528301886792453,
+        "wer": 0.875,
+        "character_errors": 13,
+        "characters": 53,
+        "word_errors": 7,
+        "words": 8
+      },
+      "hypothesis": "Ингээд манай их Жаргалантын сангийн ааш ахуй ч суваг буулгав",
+      "terminated": null,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "source_ids": [
+        "historical_protocol",
+        "historical_results",
+        "historical_verification"
+      ],
+      "metric_scope": "Individual historical clip; exploratory three-text/one-seed diagnostic, not a group or original114 score",
+      "seconds": 4.32,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "historical-epoch2",
+      "group_id": "historical-match",
+      "label": "Full epoch-2 adapted model",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/custom-reference-epoch2-examples/example-001.wav",
+      "bundle_filename": "historical-epoch2.wav",
+      "audio_sha256": "20478c3b4314a59da3f41596411f2b0fcd64a60c94617ebb79ff164b7f92640f",
+      "case": "001",
+      "text": "Ингээд манайх Жаргалантын сангийн аж ахуйд суух болов.",
+      "seed": 2026,
+      "step": null,
+      "cer": 0.018867924528301886,
+      "wer": 0.125,
+      "cosine": 0.9729294180870056,
+      "score": {
+        "cer": 0.018867924528301886,
+        "wer": 0.125,
+        "character_errors": 1,
+        "characters": 53,
+        "word_errors": 1,
+        "words": 8
+      },
+      "hypothesis": "Ингээд манайх Жаргалантын сангийн аж ахуй суух болов",
+      "terminated": null,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "source_ids": [
+        "historical_protocol",
+        "historical_results",
+        "historical_verification"
+      ],
+      "metric_scope": "Individual historical clip; exploratory three-text/one-seed diagnostic, not a group or original114 score",
+      "seconds": 4.72,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "historical-half_blend",
+      "group_id": "historical-match",
+      "label": "User-preferred halfway blend",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-half-blend/half_blend-001.wav",
+      "bundle_filename": "historical-half_blend.wav",
+      "audio_sha256": "cd32675b26cc6619a9e3d5d66ee4425a55b62a4eb10015c05de7495d13504a00",
+      "case": "001",
+      "text": "Ингээд манайх Жаргалантын сангийн аж ахуйд суух болов.",
+      "seed": 2026,
+      "step": null,
+      "cer": 0.09433962264150944,
+      "wer": 0.375,
+      "cosine": 0.9854708909988403,
+      "score": {
+        "cer": 0.09433962264150944,
+        "wer": 0.375,
+        "character_errors": 5,
+        "characters": 53,
+        "word_errors": 3,
+        "words": 8
+      },
+      "hypothesis": "Ингээд манай жаргалантын сангийн нааж ахуйд сүйх болов",
+      "terminated": null,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "source_ids": [
+        "historical_protocol",
+        "historical_results",
+        "historical_verification"
+      ],
+      "metric_scope": "Individual historical clip; exploratory three-text/one-seed diagnostic, not a group or original114 score",
+      "seconds": 4.64,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "masked-0",
+      "group_id": "masked-fixed",
+      "label": "Frozen starting policy",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000000/2026-masked-custom-calibration-000.wav",
+      "bundle_filename": "masked-00-fixed-custom.wav",
+      "audio_sha256": "c0886d426d60153b3aecc2b72090788ce35ddd734004dc71a36bbcfe41c06836",
+      "case": "masked-custom-calibration-000",
+      "text": "Тэр нэг л бүтэлгүй нөхөр шиг байсан.",
+      "seed": 2026,
+      "step": 0,
+      "cer": 0.0,
+      "wer": 0.0,
+      "cosine": 0.9829955101013184,
+      "score": {
+        "cer": 0.0,
+        "wer": 0.0,
+        "character_errors": 0,
+        "characters": 35,
+        "word_errors": 0,
+        "words": 7
+      },
+      "hypothesis": "Тэр нэг л бүтэлгүй нөхөр шиг байсан",
+      "terminated": true,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "checkpoint_sha256": "185272835a10071b62f6657c9f18b6fb5f7752bb78a972530577222b26d44a30",
+      "trajectory_sha256": "582a9e99f6eafcafeb3a6c55cd7a095479a9230e82346bd85672136a4756f242",
+      "source_ids": [
+        "masked_speech_protocol",
+        "masked_results_0",
+        "masked_audit_0"
+      ],
+      "metric_scope": "Individual fixed clip from complete audited calibration80; not a new-best or original114 result",
+      "seconds": 2.8,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "masked-8",
+      "group_id": "masked-fixed",
+      "label": "After 8 supervised updates",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000008/2026-masked-custom-calibration-000.wav",
+      "bundle_filename": "masked-08-fixed-custom.wav",
+      "audio_sha256": "c0886d426d60153b3aecc2b72090788ce35ddd734004dc71a36bbcfe41c06836",
+      "case": "masked-custom-calibration-000",
+      "text": "Тэр нэг л бүтэлгүй нөхөр шиг байсан.",
+      "seed": 2026,
+      "step": 8,
+      "cer": 0.0,
+      "wer": 0.0,
+      "cosine": 0.9829955101013184,
+      "score": {
+        "cer": 0.0,
+        "wer": 0.0,
+        "character_errors": 0,
+        "characters": 35,
+        "word_errors": 0,
+        "words": 7
+      },
+      "hypothesis": "Тэр нэг л бүтэлгүй нөхөр шиг байсан",
+      "terminated": true,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "checkpoint_sha256": "956d764a93182ac715677287d9f773fe4b9e40c7f8fc1c0775cb6b5b6468069e",
+      "trajectory_sha256": "582a9e99f6eafcafeb3a6c55cd7a095479a9230e82346bd85672136a4756f242",
+      "source_ids": [
+        "masked_speech_protocol",
+        "masked_results_8",
+        "masked_audit_8"
+      ],
+      "metric_scope": "Individual fixed clip from complete audited calibration80; not a new-best or original114 result",
+      "seconds": 2.8,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "masked-16",
+      "group_id": "masked-fixed",
+      "label": "After 16 supervised updates",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000016/2026-masked-custom-calibration-000.wav",
+      "bundle_filename": "masked-16-fixed-custom.wav",
+      "audio_sha256": "2e61483fe7cf1436e637ee888c47dc8305c27f60f93a18a2caa11ad5b3267425",
+      "case": "masked-custom-calibration-000",
+      "text": "Тэр нэг л бүтэлгүй нөхөр шиг байсан.",
+      "seed": 2026,
+      "step": 16,
+      "cer": 0.08571428571428572,
+      "wer": 0.14285714285714285,
+      "cosine": 0.9833962917327881,
+      "score": {
+        "cer": 0.08571428571428572,
+        "wer": 0.14285714285714285,
+        "character_errors": 3,
+        "characters": 35,
+        "word_errors": 1,
+        "words": 7
+      },
+      "hypothesis": "Тэр инээх л бүтэлгүй нөхөр шиг байсан",
+      "terminated": true,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "checkpoint_sha256": "da0eb2b510f0c6201048229be2a78690a7d0b56df007fe2a290497397a490a20",
+      "trajectory_sha256": "8513f6072f644d500e4048557f7761aefe30e21afb77e1035d16ad7ec3e8e092",
+      "source_ids": [
+        "masked_speech_protocol",
+        "masked_results_16",
+        "masked_audit_16"
+      ],
+      "metric_scope": "Individual fixed clip from complete audited calibration80; not a new-best or original114 result",
+      "seconds": 2.72,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "masked-32",
+      "group_id": "masked-fixed",
+      "label": "After 32 supervised updates",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000032/2026-masked-custom-calibration-000.wav",
+      "bundle_filename": "masked-32-fixed-custom.wav",
+      "audio_sha256": "f9072a30feb835492997e7bff962bcc8f41835a3480a6e99fb88c011bed2cc03",
+      "case": "masked-custom-calibration-000",
+      "text": "Тэр нэг л бүтэлгүй нөхөр шиг байсан.",
+      "seed": 2026,
+      "step": 32,
+      "cer": 0.0,
+      "wer": 0.0,
+      "cosine": 0.9834462404251099,
+      "score": {
+        "cer": 0.0,
+        "wer": 0.0,
+        "character_errors": 0,
+        "characters": 35,
+        "word_errors": 0,
+        "words": 7
+      },
+      "hypothesis": "Тэр нэг л бүтэлгүй нөхөр шиг байсан",
+      "terminated": true,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "checkpoint_sha256": "8110e01146001a297faa82039ee7d1bd684885c2e373284bddf07a49f68e16ad",
+      "trajectory_sha256": "140b6ec58b8f11e88b02f6bf6227dd7be50f1cd968723172ad872fca4eb49c77",
+      "source_ids": [
+        "masked_speech_protocol",
+        "masked_results_32",
+        "masked_audit_32"
+      ],
+      "metric_scope": "Individual fixed clip from complete audited calibration80; not a new-best or original114 result",
+      "seconds": 2.88,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2
+    },
+    {
+      "id": "broader-requested-8",
+      "group_id": "reference",
+      "label": "Requested broader checkpoint 8 sample — not a new best",
+      "kind": "generated",
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/eval-000008/2027-masked-custom-calibration-001.wav",
+      "bundle_filename": "broader-08-requested-custom-001-seed2027.wav",
+      "audio_sha256": "e046960b343e801f9e96a2146844264db7329ca647b9c8a2b9ed66420b0ee370",
+      "case": "masked-custom-calibration-001",
+      "text": "Ертөнцийн дөрвөн зүгийг хамгаалагч бурхад нь ертөнцийг нураагч хүчнээс хамгаалдаг байна.",
+      "seed": 2027,
+      "step": 8,
+      "cer": 0.0,
+      "wer": 0.0,
+      "cosine": 0.9840666651725769,
+      "score": {
+        "cer": 0.0,
+        "wer": 0.0,
+        "character_errors": 0,
+        "characters": 87,
+        "word_errors": 0,
+        "words": 11
+      },
+      "hypothesis": "Ертөнцийн дөрвөн зүгийг хамгаалагч бурхад нь ертөнцийг нураагч хүчнээс хамгаалдаг байна",
+      "terminated": true,
+      "reference_sha256": "860372aef1859fa8295d68a16a20fa0b0f9bad2e19b30048da0ee1039b32827d",
+      "checkpoint_sha256": "5467984fbdc9db2c0b44ce21132346b3272a5a6c90cc260a383fae33dd94a6c7",
+      "trajectory_sha256": "2e9493df72a8eca0b43fdd0f2fd37730fcc9d84ba7893b0835f3deeff91521ee",
+      "source_ids": [
+        "broader_speech_protocol",
+        "broader_results_8",
+        "broader_audit_8",
+        "broader_requested_trajectory_8"
+      ],
+      "metric_scope": "User-requested individual clip from the fully audited broader-checkpoint8 calibration80. Clip CER is 0%; pooled custom-group CER is 1.1086474501% over16 recordings. Different text from the human reference. Not a new-best or original114 result.",
+      "seconds": 6.72,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width_bytes": 2,
+      "selection_reason": "Exact user-requested example; no model promotion",
+      "group_pooled_cer": 0.011086474501108648,
+      "group_recordings": 16
+    }
+  ],
+  "sources": {
+    "historical_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-half-blend/protocol.json",
+      "sha256": "51e1b39993c4a2318849e947d9e6e85f63fc7f938afca7da539cb2ee295f7ba7"
+    },
+    "historical_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-half-blend/results.json",
+      "sha256": "ec806f74a747b992dfd399914bd24fa0a492e44b777f78285555af1d28e4a513"
+    },
+    "historical_verification": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-half-blend/verification.json",
+      "sha256": "b79071d0f553aa4245987d0a5e701e2f8fcb0d9a1f315719dcf9a500c1d342a5"
+    },
+    "masked_speech_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/speech-protocol.json",
+      "sha256": "07c12b076ee08f81c2a409a300a02232d04a99a88c1fb1b6bcdcdb11248d318a"
+    },
+    "masked_results_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000000/results.json",
+      "sha256": "3f8f1680f4e687650580888e6c770bc41f31dfcba7f5b96fe2363a779bce3ab4"
+    },
+    "masked_audit_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000000.json",
+      "sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b"
+    },
+    "masked_results_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000008/results.json",
+      "sha256": "bf2c9187f01847b450421f89a2cbb4cbb24dd2e462ceff67949879366d8ab592"
+    },
+    "masked_audit_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000008.json",
+      "sha256": "39a6abe9e7c634ab0ae09db82fd413e05fda3796ac50603d54fe73809260b115"
+    },
+    "masked_results_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000016/results.json",
+      "sha256": "798f5db5c19d33e795b258ee77c56029a7c25bb2b539babaa67ef61114036441"
+    },
+    "masked_audit_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000016.json",
+      "sha256": "a06384f2d7ec0f967711ad9f4190456f52e1380889596a9ee9eb833c5d477b55"
+    },
+    "masked_results_32": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000032/results.json",
+      "sha256": "f4f187cd971c8c5f9f23a17f74f9506c365bb1b4faa4051804d431f0a13d2df5"
+    },
+    "masked_audit_32": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000032.json",
+      "sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf"
+    },
+    "broader_speech_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/speech-protocol.json",
+      "sha256": "5c4cf2a74c55a24c1656727a6aebf388cffb3825f82981d770d7a27167d10d78"
+    },
+    "broader_results_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/eval-000008/results.json",
+      "sha256": "255d2b9fbdafc77ba750a0ca6bcaea6c76167d956d2c4af75b121dc092f5e873"
+    },
+    "broader_audit_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/verification-000008.json",
+      "sha256": "f4d88af93bf00662656e78faf0c77c6400e22d1f823414b73d73c2bc183ede1b"
+    },
+    "broader_requested_trajectory_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/eval-000008/2027-masked-custom-calibration-001.pt",
+      "sha256": "2e9493df72a8eca0b43fdd0f2fd37730fcc9d84ba7893b0835f3deeff91521ee"
+    }
+  },
+  "limitations": [
+    "Do not compare individual-clip scores to group aggregate scores.",
+    "The historical and masked groups use different target text; compare policies within each matched group.",
+    "Historical termination metadata was not present in the saved three-text report and is null here.",
+    "No new speech was generated or favorable seed substituted. Audio files remain outside Git; paths and metadata only are committed.",
+    "The requested broader-checkpoint8 example is explicitly requested listening material, not the fixed-case comparison or evidence of a new best."
+  ]
+}

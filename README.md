@@ -6,6 +6,16 @@ This repository is the home for the data preparation, training, evaluation, and 
 
 ## Project status
 
+The active 0.6B pronunciation/reference-voice optimization is documented in the
+[experiment summary](docs/experiments/0.6b/README.md) and
+[comprehensive report](docs/experiments/0.6b/report.md). Its joint goal is still
+in progress. The older 1.7B demo measurements below are a separate result.
+
+The newer **0.6B model uses LoRA**, not full-parameter fine-tuning. Its full-cohort
+run and precision/checkpoint-selection improvements are documented in the
+[0.6B training audit](docs/0.6b-training-analysis.md). The full talker run described
+below is the older **1.7B** model.
+
 Full talker fine-tuning is complete: 28,001 retained training clips (32.70 hours), three epochs, final step 5253. The broader prepared corpus contains 38,576 clips (50.53 hours); it is not the training split. The inference export is available to authorized users at [khanddorj/hojil-tts on Hugging Face](https://huggingface.co/khanddorj/hojil-tts), which remains private.
 
 The original development ASR evaluation measured mean CER 5.62% and WER 11.12% across conditioning modes. These are recognizer-based proxies, not listener accuracy. Later human review selected **Alternate 2 + full sentences**: 16/20 sentences correct, 14/20 natural. Two new seeds corrected all four remaining failures in eight selected retries. These small development experiments do not establish production readiness or a universally best seed. See [latest findings](docs/listening-findings-2026-11-04.md).

@@ -1,0 +1,3716 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-12",
+  "title": "0.6B experiment visual evidence",
+  "status": {
+    "joint_goal_achieved": false,
+    "global_model_promoted": false,
+    "masked_supervision_terminal": "maximum_updates_reached",
+    "audited_steps": [
+      0,
+      8,
+      16,
+      32
+    ],
+    "original114_evaluated_for_masked_pilot": false,
+    "native_job_running": true,
+    "next_status": "Broader checkpoint16 calibration80 audited: tradeoff, no joint qualification/new best. Checkpoint32 underway; no later quality result claimed."
+  },
+  "units": {
+    "cer": "ratio; multiply by100 for percent display",
+    "wer": "ratio; multiply by100 for percent display",
+    "cosine": "unitless original-reference speaker-macro unless explicitly labeled otherwise",
+    "loss": "native objective units; compare only within stated fixed-probe series",
+    "gradient_cosine": "unitless local raw gradient alignment, not speaker cosine"
+  },
+  "metric_definitions": {
+    "cer": "Total Levenshtein character edits divided by total normalized reference characters; not average clipCER.",
+    "wer": "Total word edits divided by total normalized reference words; diagnostic, not final goal threshold.",
+    "cosine": "Average recording similarity within speaker, then average speakers; not a percentage of identity or human listening score.",
+    "normalization": "Pinned scoring normalization uses Unicode NFC, casefold, punctuation removal and collapsed spaces; CER includes normalized spaces.",
+    "goal": "Complete original114; both groups independently CER<0.03 and cosine>0.984, no truncations, complete native/artifact audit and successful owning process closure.",
+    "missing": "null means not supplied/measured in this dataset. Never draw as0."
+  },
+  "goal_boundaries": {
+    "cer": {
+      "operator": "<",
+      "value": 0.03
+    },
+    "cosine": {
+      "operator": ">",
+      "value": 0.984
+    },
+    "wer": null,
+    "apply_to_panel_id": "original114",
+    "groups": [
+      "development",
+      "custom"
+    ]
+  },
+  "panels": {
+    "dev44_two_seed": {
+      "label": "Historical DEV44, 88 generated recordings",
+      "texts": 44,
+      "recordings": 88,
+      "speakers": 10,
+      "seeds": [
+        2026,
+        2027
+      ],
+      "character_denominator": 5660,
+      "word_denominator": 876,
+      "scope": "Historical development selection; rates pooled across both seeds. Voice scores post hoc from the same saved WAVs.",
+      "backend": null,
+      "backend_note": "Historical runtime details remain in linked source protocols; not asserted identical to later CPU FP32 native panels."
+    },
+    "test30_two_seed": {
+      "label": "Historical TEST30, 60 generated recordings per epoch",
+      "texts": 30,
+      "recordings": 60,
+      "speakers": 10,
+      "seeds": [
+        2026,
+        2027
+      ],
+      "character_denominator": 3262,
+      "word_denominator": 512,
+      "scope": "Epoch2/3 initial reserved comparison; six-epoch expansion exploratory after test inspection. Not a fresh selection set.",
+      "backend": null,
+      "backend_note": "Historical runtime details remain in linked source protocols; not asserted identical to later CPU FP32 native panels."
+    },
+    "epoch_fixed_loss_probes": {
+      "label": "Historical matched fixed teacher-loss probes",
+      "recordings": null,
+      "speakers": null,
+      "seeds": null,
+      "scope": "Dropout-disabled matched training/familiar/unseen cohorts, different from generated DEV44. Displayed losses rounded to five decimals.",
+      "backend": null,
+      "backend_note": "Historical runtime details remain in linked source protocols; not asserted identical to later CPU FP32 native panels."
+    },
+    "original114": {
+      "label": "Original joint-goal panel, 114 generated recordings",
+      "texts": 57,
+      "recordings": 114,
+      "seeds": [
+        2026,
+        2027
+      ],
+      "groups": {
+        "development": {
+          "texts": 44,
+          "recordings": 88,
+          "speakers": 10
+        },
+        "custom": {
+          "texts": 13,
+          "recordings": 26,
+          "speakers": 1
+        }
+      },
+      "scope": "Fixed joint-goal panel repeatedly inspected during development; not untouched final test.",
+      "backend": {
+        "speech": "CPU FP32 SDPA,4threads,TF32 disabled",
+        "asr": "Pinned BuzzASR CUDA FP32, identical registered decoding per experiment",
+        "cosine": "Original unadapted reference speaker encoder; speaker macro"
+      }
+    },
+    "calibration80": {
+      "label": "Masked-supervision calibration, 80 generated recordings",
+      "texts": 40,
+      "recordings": 80,
+      "seeds": [
+        2026,
+        2027
+      ],
+      "groups": {
+        "development": {
+          "texts": 32,
+          "recordings": 64,
+          "speakers": 16,
+          "character_denominator": 4276,
+          "word_denominator": 658
+        },
+        "custom": {
+          "texts": 8,
+          "recordings": 16,
+          "speakers": 1,
+          "character_denominator": 902,
+          "word_denominator": 138
+        }
+      },
+      "scope": "Separate from original114. Development uses full-reference route; custom uses half-reference/full-PAD. All0/8/16/32 audits complete.",
+      "backend": {
+        "speech": "CPU FP32 SDPA,4threads,TF32 disabled",
+        "asr": "Pinned BuzzASR CUDA FP32, identical registered decoding per experiment",
+        "cosine": "Original unadapted reference speaker encoder; speaker macro"
+      }
+    },
+    "masked_teacher_probes": {
+      "label": "Fixed masked-supervision real-target teacher probes",
+      "fitting_pairs": 16,
+      "calibration_pairs": 32,
+      "reference_modes": [
+        "full",
+        "half"
+      ],
+      "scope": "Same real pairs evaluated in both modes; no calibration optimizer updates. Objective not comparable to historical epoch-loss values.",
+      "backend": {
+        "teacher": "CUDA FP32 with source-bound numerical configuration"
+      }
+    },
+    "natural32": {
+      "label": "Exact natural development target control",
+      "texts": 32,
+      "recordings": 32,
+      "speakers": 16,
+      "seeds": null,
+      "character_denominator": 2138,
+      "word_denominator": 329,
+      "scope": "One real target WAV per calibration development text; not64 independent observations, not a custom-speaker human control.",
+      "backend": {
+        "speech": null,
+        "asr": "Pinned BuzzASR CUDA FP32; same decoding as calibration80",
+        "cosine": null
+      }
+    },
+    "gradient_fitting30": {
+      "label": "Fitting-only gradient diagnostic",
+      "pairs": 30,
+      "pair_mode_records": 60,
+      "fixed_probe_pairs": 16,
+      "flagged_pairs": 15,
+      "overlap_pairs": 1,
+      "unflagged_pairs": 15,
+      "reference_modes": [
+        "full",
+        "half"
+      ],
+      "teacher_step": 0,
+      "student_step": 32,
+      "scope": "Predetermined enriched fitting-only sample. No optimizer updates; local raw gradients, not Adam steps or generated quality.",
+      "backend": {
+        "native_gradients": "CUDA FP32 current replay",
+        "independent_geometry": "Saved FP32 vectors recomputed on CPU FP64; no model rerun"
+      }
+    },
+    "routing_development64": {
+      "label": "Routing ablation: fixed calibration development64",
+      "parent_panel_id": "calibration80",
+      "group": "development",
+      "texts": 32,
+      "recordings_per_condition": 64,
+      "speakers": 16,
+      "seeds": [
+        2026,
+        2027
+      ],
+      "character_denominator": 4276,
+      "word_denominator": 658,
+      "backend": {
+        "speech": "CPU FP32 SDPA,4threads,TF32 disabled",
+        "asr": "Pinned BuzzASR CUDA FP32, identical registered decoding per experiment",
+        "cosine": "Original unadapted reference speaker encoder; speaker macro"
+      },
+      "scope": "Same development cases in four conditions: frozen checkpoint0/32 × full/half reference. Full-route rows reuse existing masked calibration records. Custom16 per endpoint shared unchanged and deliberately not duplicated in this chart."
+    }
+  },
+  "charts": {
+    "fp32_epochs": {
+      "title": "Lower fixed losses did not identify the best development speech endpoint",
+      "panel_id": "dev44_two_seed",
+      "loss_panel_id": "epoch_fixed_loss_probes",
+      "recommended_visual": "Separate aligned line charts for teacher losses and pooled CER/WER; do not share numerical axes. Optional voice curve clearly post hoc.",
+      "source_ids": [
+        "training_inventory"
+      ],
+      "limitations": [
+        "FP32 here means trainable parameters, gradients and moments; frozen storage/autocast remained BF16.",
+        "Epoch3 selected on development; epochs4/5/6 triggered speech_regression_patience. Codec-loss guard never triggered.",
+        "No seventh completed epoch. No claim that training loss alone proves classical overfit."
+      ],
+      "records": [
+        {
+          "epoch": 1,
+          "cumulative_updates": 1750,
+          "clip_exposures": 28001,
+          "train_loss": 3.30862,
+          "familiar_validation_loss": 3.37518,
+          "unseen_validation_loss": 3.39855,
+          "loss_display_decimals": 5,
+          "character_errors": 369,
+          "characters": 5660,
+          "word_errors": 126,
+          "words": 876,
+          "cer": 0.06519434628975265,
+          "wer": 0.14383561643835616,
+          "cosine": 0.9816280113822884,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": false,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        },
+        {
+          "epoch": 2,
+          "cumulative_updates": 3500,
+          "clip_exposures": 56002,
+          "train_loss": 3.28816,
+          "familiar_validation_loss": 3.35227,
+          "unseen_validation_loss": 3.38152,
+          "loss_display_decimals": 5,
+          "character_errors": 271,
+          "characters": 5660,
+          "word_errors": 99,
+          "words": 876,
+          "cer": 0.04787985865724382,
+          "wer": 0.11301369863013698,
+          "cosine": 0.9805219641990132,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": false,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        },
+        {
+          "epoch": 3,
+          "cumulative_updates": 5250,
+          "clip_exposures": 84003,
+          "train_loss": 3.27862,
+          "familiar_validation_loss": 3.34946,
+          "unseen_validation_loss": 3.37782,
+          "loss_display_decimals": 5,
+          "character_errors": 185,
+          "characters": 5660,
+          "word_errors": 79,
+          "words": 876,
+          "cer": 0.03268551236749117,
+          "wer": 0.09018264840182648,
+          "cosine": 0.9801313706735769,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": true,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        },
+        {
+          "epoch": 4,
+          "cumulative_updates": 7000,
+          "clip_exposures": 112004,
+          "train_loss": 3.27108,
+          "familiar_validation_loss": 3.34274,
+          "unseen_validation_loss": 3.37379,
+          "loss_display_decimals": 5,
+          "character_errors": 229,
+          "characters": 5660,
+          "word_errors": 99,
+          "words": 876,
+          "cer": 0.04045936395759717,
+          "wer": 0.11301369863013698,
+          "cosine": 0.9800573871864213,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": false,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        },
+        {
+          "epoch": 5,
+          "cumulative_updates": 8750,
+          "clip_exposures": 140005,
+          "train_loss": 3.26484,
+          "familiar_validation_loss": 3.33861,
+          "unseen_validation_loss": 3.36898,
+          "loss_display_decimals": 5,
+          "character_errors": 210,
+          "characters": 5660,
+          "word_errors": 86,
+          "words": 876,
+          "cer": 0.037102473498233215,
+          "wer": 0.09817351598173515,
+          "cosine": 0.9809105548262597,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": false,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        },
+        {
+          "epoch": 6,
+          "cumulative_updates": 10500,
+          "clip_exposures": 168006,
+          "train_loss": 3.25807,
+          "familiar_validation_loss": 3.3319,
+          "unseen_validation_loss": 3.36676,
+          "loss_display_decimals": 5,
+          "character_errors": 220,
+          "characters": 5660,
+          "word_errors": 95,
+          "words": 876,
+          "cer": 0.038869257950530034,
+          "wer": 0.10844748858447488,
+          "cosine": 0.9803107900751961,
+          "cosine_aggregation": "speaker_macro",
+          "selected_development": false,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "dev44_two_seed",
+          "loss_panel_id": "epoch_fixed_loss_probes"
+        }
+      ]
+    },
+    "fp32_reserved_test": {
+      "title": "Test expansion gave a different endpoint ranking",
+      "panel_id": "test30_two_seed",
+      "source_ids": [
+        "training_inventory"
+      ],
+      "limitations": [
+        "Already inspected test when expanded to all six epochs; exploratory ranking, no selection change.",
+        "Do not plot as the same panel as DEV44."
+      ],
+      "records": [
+        {
+          "epoch": 1,
+          "character_errors": 188,
+          "characters": 3262,
+          "word_errors": 69,
+          "words": 512,
+          "cer": 0.05763335377069283,
+          "wer": 0.134765625,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        },
+        {
+          "epoch": 2,
+          "character_errors": 146,
+          "characters": 3262,
+          "word_errors": 56,
+          "words": 512,
+          "cer": 0.04475781729000613,
+          "wer": 0.109375,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        },
+        {
+          "epoch": 3,
+          "character_errors": 181,
+          "characters": 3262,
+          "word_errors": 69,
+          "words": 512,
+          "cer": 0.05548743102391171,
+          "wer": 0.134765625,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        },
+        {
+          "epoch": 4,
+          "character_errors": 124,
+          "characters": 3262,
+          "word_errors": 49,
+          "words": 512,
+          "cer": 0.03801348865726548,
+          "wer": 0.095703125,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        },
+        {
+          "epoch": 5,
+          "character_errors": 174,
+          "characters": 3262,
+          "word_errors": 66,
+          "words": 512,
+          "cer": 0.05334150827713059,
+          "wer": 0.12890625,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        },
+        {
+          "epoch": 6,
+          "character_errors": 119,
+          "characters": 3262,
+          "word_errors": 46,
+          "words": 512,
+          "cer": 0.03648068669527897,
+          "wer": 0.08984375,
+          "cosine": null,
+          "source_ids": [
+            "training_inventory"
+          ],
+          "panel_id": "test30_two_seed"
+        }
+      ]
+    },
+    "original114": {
+      "title": "Neither completed full-panel PAD policy met the joint goal",
+      "panel_id": "original114",
+      "recommended_visual": "Separate group scatterplots (CER vs cosine) with strict goal boundaries; WER alongside.",
+      "records": [
+        {
+          "policy": "Centered16 full-PAD",
+          "group": "custom",
+          "recordings": 26,
+          "speakers": 1,
+          "cer": 0.03279631760644419,
+          "wer": 0.08270676691729323,
+          "cosine": 0.9835558739992288,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "centered114"
+          ],
+          "dispatch": "Custom half-prefix/full-PAD; development full-route fallback",
+          "panel_id": "original114"
+        },
+        {
+          "policy": "Centered16 full-PAD",
+          "group": "development",
+          "recordings": 88,
+          "speakers": 10,
+          "cer": 0.04222614840989399,
+          "wer": 0.10730593607305935,
+          "cosine": 0.9842265231576232,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "centered114"
+          ],
+          "dispatch": "Custom half-prefix/full-PAD; development full-route fallback",
+          "panel_id": "original114"
+        },
+        {
+          "policy": "Attention4/speaker8 full baseline",
+          "group": "custom",
+          "recordings": 26,
+          "speakers": 1,
+          "cer": 0.03624856156501726,
+          "wer": 0.10150375939849623,
+          "cosine": 0.9785815179347992,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "attention114baseline"
+          ],
+          "dispatch": "Full-route for both groups",
+          "panel_id": "original114"
+        },
+        {
+          "policy": "Attention4/speaker8 full baseline",
+          "group": "development",
+          "recordings": 88,
+          "speakers": 10,
+          "cer": 0.04399293286219081,
+          "wer": 0.11986301369863013,
+          "cosine": 0.9844588006867303,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "attention114baseline"
+          ],
+          "dispatch": "Full-route for both groups",
+          "panel_id": "original114"
+        },
+        {
+          "policy": "Attention4/speaker8 custom full-PAD",
+          "group": "custom",
+          "recordings": 26,
+          "speakers": 1,
+          "cer": 0.040851553509781355,
+          "wer": 0.11278195488721804,
+          "cosine": 0.9827491961992704,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "attention114candidate"
+          ],
+          "dispatch": "Custom half-prefix/full-PAD; development full-route fallback",
+          "panel_id": "original114"
+        },
+        {
+          "policy": "Attention4/speaker8 custom full-PAD",
+          "group": "development",
+          "recordings": 88,
+          "speakers": 10,
+          "cer": 0.04399293286219081,
+          "wer": 0.11986301369863013,
+          "cosine": 0.9844588006867303,
+          "character_errors": null,
+          "word_errors": null,
+          "truncated": 0,
+          "goal_group_pass": false,
+          "source_ids": [
+            "attention114candidate"
+          ],
+          "dispatch": "Custom half-prefix/full-PAD; development full-route fallback",
+          "panel_id": "original114"
+        }
+      ],
+      "limitations": [
+        "Attention baseline and candidate development WAVs are exact shared fallback; do not count as independent evidence.",
+        "Centered16 is the masked pilot starting policy, not a global winner on every metric."
+      ]
+    },
+    "masked_supervision": {
+      "title": "Custom recovers at32; development still fails both criteria",
+      "panel_id": "calibration80",
+      "records": [
+        {
+          "step": 0,
+          "group": "custom",
+          "recordings": 16,
+          "speakers": 1,
+          "cer": 0.017738359201773836,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9843238890171051,
+          "character_errors": 16,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "truncated": 0,
+          "group_numeric_pass": true,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.0022172949002217295,
+              "pooled_wer": 0.014492753623188406,
+              "mean_cer": 0.002551020408163265,
+              "mean_wer": 0.017857142857142856
+            },
+            "2027": {
+              "pooled_cer": 0.03325942350332594,
+              "pooled_wer": 0.057971014492753624,
+              "mean_cer": 0.028296186895810954,
+              "mean_wer": 0.055357142857142855
+            }
+          },
+          "audit_sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b",
+          "source_ids": [
+            "masked_audit_0"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 0,
+          "group": "development",
+          "recordings": 64,
+          "speakers": 16,
+          "cer": 0.03905519176800749,
+          "wer": 0.10182370820668693,
+          "cosine": 0.9825698668137193,
+          "character_errors": 167,
+          "characters": 4276,
+          "word_errors": 67,
+          "words": 658,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.03928905519176801,
+              "pooled_wer": 0.09422492401215805,
+              "mean_cer": 0.03888231723128492,
+              "mean_wer": 0.09357968420468421
+            },
+            "2027": {
+              "pooled_cer": 0.03882132834424696,
+              "pooled_wer": 0.1094224924012158,
+              "mean_cer": 0.0329529371210946,
+              "mean_wer": 0.0986161408036408
+            }
+          },
+          "audit_sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b",
+          "source_ids": [
+            "masked_audit_0"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 8,
+          "group": "custom",
+          "recordings": 16,
+          "speakers": 1,
+          "cer": 0.009977827050997782,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9839908815920353,
+          "character_errors": 9,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.004434589800443459,
+              "pooled_wer": 0.028985507246376812,
+              "mean_cer": 0.004195757250268528,
+              "mean_wer": 0.030357142857142857
+            },
+            "2027": {
+              "pooled_cer": 0.015521064301552107,
+              "pooled_wer": 0.043478260869565216,
+              "mean_cer": 0.01513829215896885,
+              "mean_wer": 0.04285714285714286
+            }
+          },
+          "audit_sha256": "39a6abe9e7c634ab0ae09db82fd413e05fda3796ac50603d54fe73809260b115",
+          "source_ids": [
+            "masked_audit_8"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 8,
+          "group": "development",
+          "recordings": 64,
+          "speakers": 16,
+          "cer": 0.03858746492048644,
+          "wer": 0.10486322188449848,
+          "cosine": 0.9825779981911182,
+          "character_errors": 165,
+          "characters": 4276,
+          "word_errors": 69,
+          "words": 658,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.03695042095416277,
+              "pooled_wer": 0.10030395136778116,
+              "mean_cer": 0.0349134868881139,
+              "mean_wer": 0.09498348873348873
+            },
+            "2027": {
+              "pooled_cer": 0.040224508886810104,
+              "pooled_wer": 0.1094224924012158,
+              "mean_cer": 0.035100091243444154,
+              "mean_wer": 0.10161383755133754
+            }
+          },
+          "audit_sha256": "39a6abe9e7c634ab0ae09db82fd413e05fda3796ac50603d54fe73809260b115",
+          "source_ids": [
+            "masked_audit_8"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 16,
+          "group": "custom",
+          "recordings": 16,
+          "speakers": 1,
+          "cer": 0.02771618625277162,
+          "wer": 0.10144927536231885,
+          "cosine": 0.9835002794861794,
+          "character_errors": 25,
+          "characters": 902,
+          "word_errors": 14,
+          "words": 138,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.022172949002217297,
+              "pooled_wer": 0.07246376811594203,
+              "mean_cer": 0.022184723171565276,
+              "mean_wer": 0.06558441558441558
+            },
+            "2027": {
+              "pooled_cer": 0.03325942350332594,
+              "pooled_wer": 0.13043478260869565,
+              "mean_cer": 0.030881544995493657,
+              "mean_wer": 0.12402597402597403
+            }
+          },
+          "audit_sha256": "a06384f2d7ec0f967711ad9f4190456f52e1380889596a9ee9eb833c5d477b55",
+          "source_ids": [
+            "masked_audit_16"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 16,
+          "group": "development",
+          "recordings": 64,
+          "speakers": 16,
+          "cer": 0.047474275023386345,
+          "wer": 0.12613981762917933,
+          "cosine": 0.9825276974588633,
+          "character_errors": 203,
+          "characters": 4276,
+          "word_errors": 83,
+          "words": 658,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.04396632366697849,
+              "pooled_wer": 0.1094224924012158,
+              "mean_cer": 0.0394506157047548,
+              "mean_wer": 0.10011932511932511
+            },
+            "2027": {
+              "pooled_cer": 0.0509822263797942,
+              "pooled_wer": 0.14285714285714285,
+              "mean_cer": 0.04482653830852829,
+              "mean_wer": 0.1343225351037851
+            }
+          },
+          "audit_sha256": "a06384f2d7ec0f967711ad9f4190456f52e1380889596a9ee9eb833c5d477b55",
+          "source_ids": [
+            "masked_audit_16"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 32,
+          "group": "custom",
+          "recordings": 16,
+          "speakers": 1,
+          "cer": 0.004434589800443459,
+          "wer": 0.021739130434782608,
+          "cosine": 0.9842154011130333,
+          "character_errors": 4,
+          "characters": 902,
+          "word_errors": 3,
+          "words": 138,
+          "truncated": 0,
+          "group_numeric_pass": true,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.004434589800443459,
+              "pooled_wer": 0.014492753623188406,
+              "mean_cer": 0.00510204081632653,
+              "mean_wer": 0.017857142857142856
+            },
+            "2027": {
+              "pooled_cer": 0.004434589800443459,
+              "pooled_wer": 0.028985507246376812,
+              "mean_cer": 0.003246753246753247,
+              "mean_wer": 0.022727272727272728
+            }
+          },
+          "audit_sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf",
+          "source_ids": [
+            "masked_audit_32"
+          ],
+          "panel_id": "calibration80"
+        },
+        {
+          "step": 32,
+          "group": "development",
+          "recordings": 64,
+          "speakers": 16,
+          "cer": 0.0460710944808232,
+          "wer": 0.12158054711246201,
+          "cosine": 0.9824795871973038,
+          "character_errors": 197,
+          "characters": 4276,
+          "word_errors": 80,
+          "words": 658,
+          "truncated": 0,
+          "group_numeric_pass": false,
+          "both_groups_qualified": false,
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.04583723105706267,
+              "pooled_wer": 0.11550151975683891,
+              "mean_cer": 0.04292956549936363,
+              "mean_wer": 0.10839368964368964
+            },
+            "2027": {
+              "pooled_cer": 0.04630495790458372,
+              "pooled_wer": 0.1276595744680851,
+              "mean_cer": 0.04776888029168561,
+              "mean_wer": 0.13099192474192475
+            }
+          },
+          "audit_sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf",
+          "source_ids": [
+            "masked_audit_32"
+          ],
+          "panel_id": "calibration80"
+        }
+      ],
+      "limitations": [
+        "This80 is not original114. No pilot checkpoint qualified for original114; no new best or global promotion.",
+        "Step32 removes12 net custom character edits;11 come from one case/seed.",
+        "Nonmonotonic custom recovery after16 does not prove uniform overfitting."
+      ],
+      "source_ids": [
+        "final_error_review"
+      ]
+    },
+    "teacher_losses": {
+      "title": "Teacher objectives keep decreasing while generated speech trades off",
+      "panel_id": "masked_teacher_probes",
+      "records": [
+        {
+          "step": 0,
+          "partition": "fitting",
+          "objective": 3.3941056728363037,
+          "full_mode_objective": 3.326090469956398,
+          "half_mode_objective": 3.4621208757162094,
+          "main_mean_ce_full": 1.6350620158577431,
+          "main_mean_ce_half": 1.7644933585194191,
+          "residual_mean_ce_full": 5.636761089074053,
+          "residual_mean_ce_half": 5.658757935390817,
+          "source_ids": [
+            "teacher_0"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 0,
+          "partition": "calibration",
+          "objective": 3.426517192274332,
+          "full_mode_objective": 3.316336803138256,
+          "half_mode_objective": 3.536697581410408,
+          "main_mean_ce_full": 1.6416562055652542,
+          "main_mean_ce_half": 1.8535875635584087,
+          "residual_mean_ce_full": 5.582268229306689,
+          "residual_mean_ce_half": 5.610366382463376,
+          "source_ids": [
+            "teacher_0"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 8,
+          "partition": "fitting",
+          "objective": 3.3935955986380577,
+          "full_mode_objective": 3.3258652836084366,
+          "half_mode_objective": 3.461325913667679,
+          "main_mean_ce_full": 1.634838033484353,
+          "main_mean_ce_half": 1.7637191271345125,
+          "residual_mean_ce_full": 5.636757247838473,
+          "residual_mean_ce_half": 5.658688980276503,
+          "source_ids": [
+            "teacher_8"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 8,
+          "partition": "calibration",
+          "objective": 3.4259552881121635,
+          "full_mode_objective": 3.3162874802947044,
+          "half_mode_objective": 3.5356230959296227,
+          "main_mean_ce_full": 1.6416084497485337,
+          "main_mean_ce_half": 1.8525483971258332,
+          "residual_mean_ce_full": 5.5822632043142875,
+          "residual_mean_ce_half": 5.610248726561373,
+          "source_ids": [
+            "teacher_8"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 16,
+          "partition": "fitting",
+          "objective": 3.392970062792301,
+          "full_mode_objective": 3.3255010694265366,
+          "half_mode_objective": 3.460439056158066,
+          "main_mean_ce_full": 1.634476128861169,
+          "main_mean_ce_half": 1.762854023606937,
+          "residual_mean_ce_full": 5.63674936687241,
+          "residual_mean_ce_half": 5.658616594795972,
+          "source_ids": [
+            "teacher_16"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 16,
+          "partition": "calibration",
+          "objective": 3.4253552332520485,
+          "full_mode_objective": 3.3161510080099106,
+          "half_mode_objective": 3.5345594584941864,
+          "main_mean_ce_full": 1.6414729960933592,
+          "main_mean_ce_half": 1.8515184652644452,
+          "residual_mean_ce_full": 5.582259701598716,
+          "residual_mean_ce_half": 5.610136273061205,
+          "source_ids": [
+            "teacher_16"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 32,
+          "partition": "fitting",
+          "objective": 3.391651064157486,
+          "full_mode_objective": 3.3247827142477036,
+          "half_mode_objective": 3.4585194140672684,
+          "main_mean_ce_full": 1.6337696399593253,
+          "main_mean_ce_half": 1.7609847368031648,
+          "residual_mean_ce_full": 5.6367098825382955,
+          "residual_mean_ce_half": 5.658448641818249,
+          "source_ids": [
+            "teacher_32"
+          ],
+          "panel_id": "masked_teacher_probes"
+        },
+        {
+          "step": 32,
+          "partition": "calibration",
+          "objective": 3.42397927492857,
+          "full_mode_objective": 3.3159718215465546,
+          "half_mode_objective": 3.531986728310585,
+          "main_mean_ce_full": 1.6412909650240892,
+          "main_mean_ce_half": 1.8490173298905903,
+          "residual_mean_ce_full": 5.582269171997276,
+          "residual_mean_ce_half": 5.609897737008949,
+          "source_ids": [
+            "teacher_32"
+          ],
+          "panel_id": "masked_teacher_probes"
+        }
+      ],
+      "objective_definition": "Per pair/mode: main CE sum/(T+1) +0.3*residual CE sum/(15*T); equal pair/mode averages.",
+      "limitations": [
+        "Teacher loss is diagnostic, not a speech-quality or voice-preservation gate.",
+        "No inference of residual-gradient dominance from residual loss magnitude."
+      ]
+    },
+    "natural_asr": {
+      "title": "Natural audio recognizer control on the exact32 development texts",
+      "panel_id": "natural32",
+      "records": [
+        {
+          "group": "development",
+          "recordings": 32,
+          "speakers": 16,
+          "character_errors": 7,
+          "characters": 2138,
+          "word_errors": 4,
+          "words": 329,
+          "cer": 0.003274087932647334,
+          "wer": 0.0121580547112462,
+          "cosine": null,
+          "source_ids": [
+            "natural32_audit"
+          ],
+          "panel_id": "natural32"
+        }
+      ],
+      "limitations": [
+        "No custom human target recordings. Do not subtract control error from generated CER or alter thresholds.",
+        "Same pinned BuzzASR/decoding as masked speech; natural audio has one recording per text, generated audio has two seeds."
+      ]
+    },
+    "gradient_geometry": {
+      "title": "Small weighted residual gradient; positive aggregate CE alignment",
+      "panel_id": "gradient_fitting30",
+      "records": [
+        {
+          "stratum": "all",
+          "mode": "full",
+          "pairs": 30,
+          "observations": 30,
+          "main_residual_ce_cosine": 0.06347289565081249,
+          "weighted_residual_to_main_norm": 0.09178666534866833,
+          "task_main_ce_cosine": 0.9958786548238758,
+          "main_kl_task_cosine": -0.1079828382065384,
+          "residual_kl_task_cosine": -0.09477547585598915,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "all",
+          "mode": "half",
+          "pairs": 30,
+          "observations": 30,
+          "main_residual_ce_cosine": 0.2081348319171781,
+          "weighted_residual_to_main_norm": 0.07267753535662572,
+          "task_main_ce_cosine": 0.9975571160308551,
+          "main_kl_task_cosine": -0.4614943347023187,
+          "residual_kl_task_cosine": -0.4689551199866134,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "all",
+          "mode": "both",
+          "pairs": 30,
+          "observations": 60,
+          "main_residual_ce_cosine": 0.10642477203721995,
+          "weighted_residual_to_main_norm": 0.08386033017843882,
+          "task_main_ce_cosine": 0.9966021777062938,
+          "main_kl_task_cosine": -0.3057271848257736,
+          "residual_kl_task_cosine": -0.3103942299041314,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "fixed_probe",
+          "mode": "full",
+          "pairs": 16,
+          "observations": 16,
+          "main_residual_ce_cosine": 0.08123965237126202,
+          "weighted_residual_to_main_norm": 0.0879340770363702,
+          "task_main_ce_cosine": 0.9962349770596687,
+          "main_kl_task_cosine": -0.1803759930411004,
+          "residual_kl_task_cosine": -0.14079829317018175,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "fixed_probe",
+          "mode": "half",
+          "pairs": 16,
+          "observations": 16,
+          "main_residual_ce_cosine": 0.2237903022943911,
+          "weighted_residual_to_main_norm": 0.07136162058289759,
+          "task_main_ce_cosine": 0.9976649271000787,
+          "main_kl_task_cosine": -0.4844059173180439,
+          "residual_kl_task_cosine": -0.4645302154008464,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "fixed_probe",
+          "mode": "both",
+          "pairs": 16,
+          "observations": 32,
+          "main_residual_ce_cosine": 0.12088969876468263,
+          "weighted_residual_to_main_norm": 0.08042843691753801,
+          "task_main_ce_cosine": 0.9968885671514492,
+          "main_kl_task_cosine": -0.34700271045813363,
+          "residual_kl_task_cosine": -0.3227589946686649,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "flagged",
+          "mode": "full",
+          "pairs": 15,
+          "observations": 15,
+          "main_residual_ce_cosine": 0.08741370404726995,
+          "weighted_residual_to_main_norm": 0.08526097940704688,
+          "task_main_ce_cosine": 0.9964650583912192,
+          "main_kl_task_cosine": 0.0049032174651988955,
+          "residual_kl_task_cosine": -0.004182339332312819,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "flagged",
+          "mode": "half",
+          "pairs": 15,
+          "observations": 15,
+          "main_residual_ce_cosine": 0.14340456166788307,
+          "weighted_residual_to_main_norm": 0.07493444592628906,
+          "task_main_ce_cosine": 0.9973191315428948,
+          "main_kl_task_cosine": -0.26079909722459527,
+          "residual_kl_task_cosine": -0.2821141670142615,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "flagged",
+          "mode": "both",
+          "pairs": 15,
+          "observations": 30,
+          "main_residual_ce_cosine": 0.10419749860503484,
+          "weighted_residual_to_main_norm": 0.08208190255399864,
+          "task_main_ce_cosine": 0.9967401397044029,
+          "main_kl_task_cosine": -0.13158939521498017,
+          "residual_kl_task_cosine": -0.1518383554691697,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "unflagged",
+          "mode": "full",
+          "pairs": 15,
+          "observations": 15,
+          "main_residual_ce_cosine": 0.07380098183431567,
+          "weighted_residual_to_main_norm": 0.09230652425836762,
+          "task_main_ce_cosine": 0.995846126228469,
+          "main_kl_task_cosine": -0.1859075202322335,
+          "residual_kl_task_cosine": -0.14735140939812205,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "unflagged",
+          "mode": "half",
+          "pairs": 15,
+          "observations": 15,
+          "main_residual_ce_cosine": 0.21912812704182774,
+          "weighted_residual_to_main_norm": 0.07582566176864813,
+          "task_main_ce_cosine": 0.9973624711121276,
+          "main_kl_task_cosine": -0.4836215575784629,
+          "residual_kl_task_cosine": -0.4692305764997185,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "stratum": "unflagged",
+          "mode": "both",
+          "pairs": 15,
+          "observations": 30,
+          "main_residual_ce_cosine": 0.11534001610328243,
+          "weighted_residual_to_main_norm": 0.08514905972770874,
+          "task_main_ce_cosine": 0.996510632194081,
+          "main_kl_task_cosine": -0.34945162714700556,
+          "residual_kl_task_cosine": -0.32793567685785036,
+          "source_ids": [
+            "gradient_audit"
+          ],
+          "panel_id": "gradient_fitting30"
+        }
+      ],
+      "cross_mode_records": [
+        {
+          "component": "main_ce",
+          "full_norm": 0.16559558889525944,
+          "half_norm": 0.19369181867311824,
+          "full_half_dot": 0.026366731068736875,
+          "full_half_cosine": 0.8220462426301681,
+          "equal_mode_average_norm": 0.17151667690048514,
+          "half_to_full_norm": 1.169667742753884,
+          "source_ids": [
+            "gradient_cross_mode"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "component": "residual_ce",
+          "full_norm": 0.048538317569329456,
+          "half_norm": 0.04607387358054155,
+          "full_half_dot": 0.001989437393844891,
+          "full_half_cosine": 0.8895919241075503,
+          "equal_mode_average_norm": 0.045982727427988056,
+          "half_to_full_norm": 0.9492268353704713,
+          "source_ids": [
+            "gradient_cross_mode"
+          ],
+          "panel_id": "gradient_fitting30"
+        },
+        {
+          "component": "task",
+          "full_norm": 0.1674088578994711,
+          "half_norm": 0.19724566751489805,
+          "full_half_dot": 0.026894865520824474,
+          "full_half_cosine": 0.8144857131463256,
+          "equal_mode_average_norm": 0.17372486156150188,
+          "half_to_full_norm": 1.178227185764232,
+          "source_ids": [
+            "gradient_cross_mode"
+          ],
+          "panel_id": "gradient_fitting30"
+        }
+      ],
+      "limitations": [
+        "Norm ratios/cosines are local raw gradients at checkpoint32, not Adam updates or speech results.",
+        "Native autograd correctness/conditioning/restoration remain native attestations; saved algebra independently recomputed CPU FP64.",
+        "No aggregate residual dominance or cross-mode opposition on fixed16. Does not select residual removal, KL coefficient or mode weights."
+      ]
+    },
+    "reference_routing": {
+      "title": "Half-reference routing worsens development at both checkpoints",
+      "panel_id": "routing_development64",
+      "status": "completed_failed",
+      "records": [
+        {
+          "panel_id": "routing_development64",
+          "step": 0,
+          "route": "full",
+          "group": "development",
+          "recordings": 64,
+          "texts": 32,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "cer": 0.03905519176800749,
+          "wer": 0.10182370820668693,
+          "cosine": 0.9825698668137193,
+          "character_errors": 167,
+          "characters": 4276,
+          "word_errors": 67,
+          "words": 658,
+          "truncated": 0,
+          "half_reference": false,
+          "full_continuation_pad": true,
+          "weights_changed_within_route_comparison": false,
+          "new_recordings": 0,
+          "reused_recordings": 64,
+          "reused_from_panel_id": "calibration80",
+          "source_ids": [
+            "routing_0_full_results",
+            "routing_0_full_audit"
+          ],
+          "results_sha256": "3f8f1680f4e687650580888e6c770bc41f31dfcba7f5b96fe2363a779bce3ab4",
+          "audit_sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b",
+          "checkpoint_sha256": "185272835a10071b62f6657c9f18b6fb5f7752bb78a972530577222b26d44a30",
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.03928905519176801,
+              "pooled_wer": 0.09422492401215805,
+              "mean_cer": 0.03888231723128492,
+              "mean_wer": 0.09357968420468421
+            },
+            "2027": {
+              "pooled_cer": 0.03882132834424696,
+              "pooled_wer": 0.1094224924012158,
+              "mean_cer": 0.0329529371210946,
+              "mean_wer": 0.0986161408036408
+            }
+          }
+        },
+        {
+          "panel_id": "routing_development64",
+          "step": 0,
+          "route": "half",
+          "group": "development",
+          "recordings": 64,
+          "texts": 32,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "cer": 0.057998129092609915,
+          "wer": 0.1474164133738602,
+          "cosine": 0.9818838788196445,
+          "character_errors": 248,
+          "characters": 4276,
+          "word_errors": 97,
+          "words": 658,
+          "truncated": 0,
+          "half_reference": true,
+          "full_continuation_pad": true,
+          "weights_changed_within_route_comparison": false,
+          "new_recordings": 64,
+          "reused_recordings": 0,
+          "reused_from_panel_id": null,
+          "source_ids": [
+            "routing_0_half_results",
+            "routing_0_half_audit"
+          ],
+          "results_sha256": "e721e8162a0eee5c4ca30e795f9fcac091a51d5fb092fb75f4e28ec8cf94a44b",
+          "audit_sha256": "cbfc62346baa8c4f1621c2c0ece6681d26ac1aa86b8e0953b7f50e747a23590b",
+          "checkpoint_sha256": "185272835a10071b62f6657c9f18b6fb5f7752bb78a972530577222b26d44a30",
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.050514499532273154,
+              "pooled_wer": 0.1398176291793313,
+              "mean_cer": 0.05253679756845747,
+              "mean_wer": 0.14764402264402265
+            },
+            "2027": {
+              "pooled_cer": 0.06548175865294668,
+              "pooled_wer": 0.15501519756838905,
+              "mean_cer": 0.06457462200612693,
+              "mean_wer": 0.153909025002775
+            }
+          }
+        },
+        {
+          "panel_id": "routing_development64",
+          "step": 32,
+          "route": "full",
+          "group": "development",
+          "recordings": 64,
+          "texts": 32,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "cer": 0.0460710944808232,
+          "wer": 0.12158054711246201,
+          "cosine": 0.9824795871973038,
+          "character_errors": 197,
+          "characters": 4276,
+          "word_errors": 80,
+          "words": 658,
+          "truncated": 0,
+          "half_reference": false,
+          "full_continuation_pad": true,
+          "weights_changed_within_route_comparison": false,
+          "new_recordings": 0,
+          "reused_recordings": 64,
+          "reused_from_panel_id": "calibration80",
+          "source_ids": [
+            "routing_32_full_results",
+            "routing_32_full_audit"
+          ],
+          "results_sha256": "f4f187cd971c8c5f9f23a17f74f9506c365bb1b4faa4051804d431f0a13d2df5",
+          "audit_sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf",
+          "checkpoint_sha256": "8110e01146001a297faa82039ee7d1bd684885c2e373284bddf07a49f68e16ad",
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.04583723105706267,
+              "pooled_wer": 0.11550151975683891,
+              "mean_cer": 0.04292956549936363,
+              "mean_wer": 0.10839368964368964
+            },
+            "2027": {
+              "pooled_cer": 0.04630495790458372,
+              "pooled_wer": 0.1276595744680851,
+              "mean_cer": 0.04776888029168561,
+              "mean_wer": 0.13099192474192475
+            }
+          }
+        },
+        {
+          "panel_id": "routing_development64",
+          "step": 32,
+          "route": "half",
+          "group": "development",
+          "recordings": 64,
+          "texts": 32,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "cer": 0.0519176800748363,
+          "wer": 0.14437689969604864,
+          "cosine": 0.9816893395036459,
+          "character_errors": 222,
+          "characters": 4276,
+          "word_errors": 95,
+          "words": 658,
+          "truncated": 0,
+          "half_reference": true,
+          "full_continuation_pad": true,
+          "weights_changed_within_route_comparison": false,
+          "new_recordings": 64,
+          "reused_recordings": 0,
+          "reused_from_panel_id": null,
+          "source_ids": [
+            "routing_32_half_results",
+            "routing_32_half_audit"
+          ],
+          "results_sha256": "0d173577b853267ef0b36655607f4d4048a63ac98675d586a2c48f95ed587ad4",
+          "audit_sha256": "1d0f06317eac78c2b2d380e302542089cdeeb6e41040295dd87611600f0fb262",
+          "checkpoint_sha256": "8110e01146001a297faa82039ee7d1bd684885c2e373284bddf07a49f68e16ad",
+          "per_seed": {
+            "2026": {
+              "pooled_cer": 0.05472404115996258,
+              "pooled_wer": 0.1458966565349544,
+              "mean_cer": 0.05579419905106297,
+              "mean_wer": 0.1462419524919525
+            },
+            "2027": {
+              "pooled_cer": 0.04911131898971001,
+              "pooled_wer": 0.14285714285714285,
+              "mean_cer": 0.049274452791088066,
+              "mean_wer": 0.14131085927960926
+            }
+          }
+        }
+      ],
+      "new_recordings_total": 128,
+      "reused_recordings_total": 160,
+      "reused_development_recordings": 128,
+      "reused_custom_recordings": 32,
+      "reused_custom_recordings_per_endpoint": 16,
+      "custom_included_as_new_chart_points": false,
+      "optimizer_updates": 0,
+      "original_session_id": 23429,
+      "exit_code": 0,
+      "source_ids": [
+        "routing_final_results",
+        "routing_protocol",
+        "routing_closed",
+        "routing_scalar_review"
+      ],
+      "limitations": [
+        "Four development-only conditions; custom endpoint records are reused and shared, not new independent observations.",
+        "Checkpoint0→32 CER improves within half route but worsens within full route; descriptive fixed-panel interaction, not a general causal mechanism.",
+        "Half route is worse than full at both endpoints on CER/WER/cosine; no joint qualification or new best.",
+        "Prepared all-half original114 confirmation remains unregistered/unlaunched because checkpoint32 failed.",
+        "Native integrity audits and process completion do not imply quality success."
+      ]
+    },
+    "original_base_kv": {
+      "panel_id": "calibration80",
+      "status": "completed_failed",
+      "scope": "Same fixed64 development +16 custom recordings per arm; baseline80 reused, candidate80 new. No original114 evaluation.",
+      "backend": "CPU FP32 SDPA, four threads; native audited inputs; fixed GPU FP32 BuzzASR",
+      "records": [
+        {
+          "group": "development",
+          "arm": "baseline",
+          "policy": "Centered16 baseline",
+          "cer": 0.03905519176800749,
+          "wer": 0.10182370820668693,
+          "cosine": 0.9825698668137193,
+          "character_errors": 167,
+          "characters": 4276,
+          "word_errors": 67,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "shared_baseline": true,
+          "source_ids": [
+            "base_kv_independent_review"
+          ]
+        },
+        {
+          "group": "development",
+          "arm": "candidate",
+          "policy": "Original-base protected-prefix KV",
+          "cer": 0.1295603367633302,
+          "wer": 0.2613981762917933,
+          "cosine": 0.9801993099972606,
+          "character_errors": 554,
+          "characters": 4276,
+          "word_errors": 172,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "shared_baseline": false,
+          "source_ids": [
+            "base_kv_independent_review"
+          ]
+        },
+        {
+          "group": "custom",
+          "arm": "baseline",
+          "policy": "Centered16 baseline",
+          "cer": 0.017738359201773836,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9843238890171051,
+          "character_errors": 16,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "shared_baseline": true,
+          "source_ids": [
+            "base_kv_independent_review"
+          ]
+        },
+        {
+          "group": "custom",
+          "arm": "candidate",
+          "policy": "Original-base protected-prefix KV",
+          "cer": 0.025498891352549888,
+          "wer": 0.08695652173913043,
+          "cosine": 0.9846881814301014,
+          "character_errors": 23,
+          "characters": 902,
+          "word_errors": 12,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "seeds": [
+            2026,
+            2027
+          ],
+          "shared_baseline": false,
+          "source_ids": [
+            "base_kv_independent_review"
+          ]
+        }
+      ],
+      "optimizer_updates": 0,
+      "calibration_qualified": false,
+      "goal_achieved": false,
+      "paired_diagnostics": {
+        "development": {
+          "baseline": {
+            "character_errors": 167,
+            "characters": 4276,
+            "word_errors": 67,
+            "words": 658,
+            "pooled_cer": 0.03905519176800749,
+            "pooled_wer": 0.10182370820668693,
+            "mean_cer": 0.035917627176189765,
+            "mean_wer": 0.0960979125041625,
+            "speaker_macro_cosine": 0.9825698668137193,
+            "recordings": 64,
+            "speakers": 16
+          },
+          "candidate": {
+            "character_errors": 554,
+            "characters": 4276,
+            "word_errors": 172,
+            "words": 658,
+            "pooled_cer": 0.1295603367633302,
+            "pooled_wer": 0.2613981762917933,
+            "mean_cer": 0.12494036858512717,
+            "mean_wer": 0.25848257645132644,
+            "speaker_macro_cosine": 0.9801993099972606,
+            "recordings": 64,
+            "speakers": 16
+          },
+          "delta": {
+            "character_errors": 387,
+            "word_errors": 105,
+            "pooled_cer": 0.09050514499532272,
+            "pooled_wer": 0.15957446808510636,
+            "speaker_macro_cosine": -0.002370556816458702
+          },
+          "exact_waveforms": 0,
+          "recording_change_counts": {
+            "character_errors": {
+              "improved": 15,
+              "equal": 16,
+              "worse": 33
+            },
+            "word_errors": {
+              "improved": 16,
+              "equal": 17,
+              "worse": 31
+            },
+            "cosine": {
+              "improved": 24,
+              "equal": 0,
+              "worse": 40
+            }
+          }
+        },
+        "custom": {
+          "baseline": {
+            "character_errors": 16,
+            "characters": 902,
+            "word_errors": 5,
+            "words": 138,
+            "pooled_cer": 0.017738359201773836,
+            "pooled_wer": 0.036231884057971016,
+            "mean_cer": 0.015423603651987111,
+            "mean_wer": 0.03660714285714285,
+            "speaker_macro_cosine": 0.9843238890171051,
+            "recordings": 16,
+            "speakers": 1
+          },
+          "candidate": {
+            "character_errors": 23,
+            "characters": 902,
+            "word_errors": 12,
+            "words": 138,
+            "pooled_cer": 0.025498891352549888,
+            "pooled_wer": 0.08695652173913043,
+            "mean_cer": 0.02108406161507665,
+            "mean_wer": 0.08076298701298701,
+            "speaker_macro_cosine": 0.9846881814301014,
+            "recordings": 16,
+            "speakers": 1
+          },
+          "delta": {
+            "character_errors": 7,
+            "word_errors": 7,
+            "pooled_cer": 0.007760532150776052,
+            "pooled_wer": 0.05072463768115942,
+            "speaker_macro_cosine": 0.0003642924129962921
+          },
+          "exact_waveforms": 0,
+          "recording_change_counts": {
+            "character_errors": {
+              "improved": 2,
+              "equal": 10,
+              "worse": 4
+            },
+            "word_errors": {
+              "improved": 0,
+              "equal": 11,
+              "worse": 5
+            },
+            "cosine": {
+              "improved": 6,
+              "equal": 0,
+              "worse": 10
+            }
+          }
+        }
+      },
+      "source_ids": [
+        "base_kv_results",
+        "base_kv_native_audit",
+        "base_kv_independent_review",
+        "base_kv_closed"
+      ]
+    },
+    "matched_teacher_calibration": {
+      "metric": "Equal pair/mode mean main CE +0.3 residual CE, teacher forced",
+      "scope": "Same32 real calibration pairs and two modes; CUDA FP32, same numeric configuration; no calibration backward. This is not generated speech quality.",
+      "records": [
+        {
+          "run": "Earlier pilot (47 speakers)",
+          "step": 0,
+          "objective": 3.426517192274332,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "prior_teacher_0"
+          ]
+        },
+        {
+          "run": "Earlier pilot (47 speakers)",
+          "step": 8,
+          "objective": 3.4259552881121635,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "prior_teacher_8"
+          ]
+        },
+        {
+          "run": "Broader pilot (256 speakers)",
+          "step": 0,
+          "objective": 3.426517192274332,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "broader_teacher_0"
+          ]
+        },
+        {
+          "run": "Broader pilot (256 speakers)",
+          "step": 8,
+          "objective": 3.4259027615189552,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "broader_teacher_8"
+          ]
+        },
+        {
+          "run": "Earlier pilot (47 speakers)",
+          "step": 16,
+          "objective": 3.4253552332520485,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "prior_teacher_16"
+          ]
+        },
+        {
+          "run": "Broader pilot (256 speakers)",
+          "step": 16,
+          "objective": 3.425279825925827,
+          "pairs": 32,
+          "modes_per_pair": 2,
+          "source_ids": [
+            "broader_teacher_16"
+          ]
+        }
+      ],
+      "same_zero_observations_verified": true,
+      "fitting_cross_run_comparison": false,
+      "interpretation": "Small objective changes do not demonstrate speech improvement, underfitting or overfitting."
+    },
+    "broader_calibration8": {
+      "panel_id": "calibration80",
+      "scope": "Same 32 development texts / 16 speakers and 8 custom texts / 1 speaker, each seeds 2026 and 2027; CPU FP32 generation. Shared baseline reused, not fresh. Separate from original114.",
+      "records": [
+        {
+          "policy": "old-0",
+          "step": 0,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 167,
+          "characters": 4276,
+          "word_errors": 67,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.03905519176800749,
+          "pooled_wer": 0.10182370820668693,
+          "mean_cer": 0.035917627176189765,
+          "mean_wer": 0.0960979125041625,
+          "speaker_macro_cosine": 0.9825698668137193,
+          "truncated": 0,
+          "cer": 0.03905519176800749,
+          "wer": 0.10182370820668693,
+          "cosine": 0.9825698668137193,
+          "source_ids": [
+            "broader_paired_8"
+          ]
+        },
+        {
+          "policy": "old-0",
+          "step": 0,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 16,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.017738359201773836,
+          "pooled_wer": 0.036231884057971016,
+          "mean_cer": 0.015423603651987111,
+          "mean_wer": 0.03660714285714285,
+          "speaker_macro_cosine": 0.9843238890171051,
+          "truncated": 0,
+          "cer": 0.017738359201773836,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9843238890171051,
+          "source_ids": [
+            "broader_paired_8"
+          ]
+        },
+        {
+          "policy": "old-8",
+          "step": 8,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 165,
+          "characters": 4276,
+          "word_errors": 69,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.03858746492048644,
+          "pooled_wer": 0.10486322188449848,
+          "mean_cer": 0.03500678906577903,
+          "mean_wer": 0.09829866314241315,
+          "speaker_macro_cosine": 0.9825779981911182,
+          "truncated": 0,
+          "cer": 0.03858746492048644,
+          "wer": 0.10486322188449848,
+          "cosine": 0.9825779981911182,
+          "source_ids": [
+            "broader_paired_8"
+          ]
+        },
+        {
+          "policy": "old-8",
+          "step": 8,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 9,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.009977827050997782,
+          "pooled_wer": 0.036231884057971016,
+          "mean_cer": 0.00966702470461869,
+          "mean_wer": 0.03660714285714286,
+          "speaker_macro_cosine": 0.9839908815920353,
+          "truncated": 0,
+          "cer": 0.009977827050997782,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9839908815920353,
+          "source_ids": [
+            "broader_paired_8"
+          ]
+        },
+        {
+          "policy": "broad-8",
+          "step": 8,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 174,
+          "characters": 4276,
+          "word_errors": 74,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.04069223573433115,
+          "pooled_wer": 0.11246200607902736,
+          "mean_cer": 0.03667792679087796,
+          "mean_wer": 0.10543414918414919,
+          "speaker_macro_cosine": 0.9826559955254197,
+          "truncated": 0,
+          "cer": 0.04069223573433115,
+          "wer": 0.11246200607902736,
+          "cosine": 0.9826559955254197,
+          "source_ids": [
+            "broader_paired_8",
+            "broader_audit_8",
+            "broader_results_8"
+          ]
+        },
+        {
+          "policy": "broad-8",
+          "step": 8,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 10,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.011086474501108648,
+          "pooled_wer": 0.036231884057971016,
+          "mean_cer": 0.010942534908700322,
+          "mean_wer": 0.03660714285714285,
+          "speaker_macro_cosine": 0.9839688204228878,
+          "truncated": 0,
+          "cer": 0.011086474501108648,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9839688204228878,
+          "source_ids": [
+            "broader_paired_8",
+            "broader_audit_8",
+            "broader_results_8"
+          ]
+        }
+      ],
+      "new_recordings": 80,
+      "reused_comparator_recordings": 160,
+      "fitting_speakers_seen": 64,
+      "fitting_speakers_planned": 256,
+      "paired_vs_baseline": {
+        "development": {
+          "per_seed_character_error_delta": {
+            "2026": 1,
+            "2027": 6
+          },
+          "text_edit_concentration": {
+            "gross_absolute_delta": 79,
+            "deterioration": 43,
+            "improvement": 36,
+            "net": 7,
+            "top5_absolute_cases": [
+              "balanced-009",
+              "balanced-003",
+              "balanced-026",
+              "balanced-021",
+              "balanced-019"
+            ],
+            "top5_absolute_delta": 48,
+            "note": "Descriptive paired deltas; absolute concentration is not a share of the signed net change."
+          },
+          "exact_waveforms": 15
+        },
+        "custom": {
+          "per_seed_character_error_delta": {
+            "2026": 1,
+            "2027": -7
+          },
+          "text_edit_concentration": {
+            "gross_absolute_delta": 8,
+            "deterioration": 1,
+            "improvement": 7,
+            "net": -6,
+            "top5_absolute_cases": [
+              "masked-custom-calibration-002",
+              "masked-custom-calibration-005",
+              "masked-custom-calibration-000",
+              "masked-custom-calibration-001",
+              "masked-custom-calibration-003"
+            ],
+            "top5_absolute_delta": 8,
+            "note": "Descriptive paired deltas; absolute concentration is not a share of the signed net change."
+          },
+          "exact_waveforms": 5
+        }
+      },
+      "relationships": {
+        "old-0": "tradeoff",
+        "old-8": "tradeoff",
+        "old-16": "candidate_pareto_dominates",
+        "old-32": "tradeoff"
+      },
+      "both_groups_qualified": false,
+      "global_model_promoted": false,
+      "native_audit": {
+        "native_inputs_verified": 80,
+        "truncated": 0,
+        "max_cosine_recomputation_error": 0
+      },
+      "source_ids": [
+        "broader_audit_8",
+        "broader_results_8",
+        "broader_paired_8"
+      ]
+    },
+    "broader_calibration16": {
+      "panel_id": "calibration80",
+      "scope": "Broader pilot at shared0/8/16: fixed 32 development texts /16 speakers and 8 custom texts /1 speaker, seeds2026/2027; CPU FP32 generation. Not original114.",
+      "records": [
+        {
+          "policy": "old-0",
+          "step": 0,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 167,
+          "characters": 4276,
+          "word_errors": 67,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.03905519176800749,
+          "pooled_wer": 0.10182370820668693,
+          "mean_cer": 0.035917627176189765,
+          "mean_wer": 0.0960979125041625,
+          "speaker_macro_cosine": 0.9825698668137193,
+          "truncated": 0,
+          "cer": 0.03905519176800749,
+          "wer": 0.10182370820668693,
+          "cosine": 0.9825698668137193,
+          "source_ids": [
+            "broader_paired_16"
+          ]
+        },
+        {
+          "policy": "old-0",
+          "step": 0,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 16,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.017738359201773836,
+          "pooled_wer": 0.036231884057971016,
+          "mean_cer": 0.015423603651987111,
+          "mean_wer": 0.03660714285714285,
+          "speaker_macro_cosine": 0.9843238890171051,
+          "truncated": 0,
+          "cer": 0.017738359201773836,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9843238890171051,
+          "source_ids": [
+            "broader_paired_16"
+          ]
+        },
+        {
+          "policy": "broad-8",
+          "step": 8,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 174,
+          "characters": 4276,
+          "word_errors": 74,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.04069223573433115,
+          "pooled_wer": 0.11246200607902736,
+          "mean_cer": 0.03667792679087796,
+          "mean_wer": 0.10543414918414919,
+          "speaker_macro_cosine": 0.9826559955254197,
+          "truncated": 0,
+          "cer": 0.04069223573433115,
+          "wer": 0.11246200607902736,
+          "cosine": 0.9826559955254197,
+          "source_ids": [
+            "broader_paired_16"
+          ]
+        },
+        {
+          "policy": "broad-8",
+          "step": 8,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 10,
+          "characters": 902,
+          "word_errors": 5,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.011086474501108648,
+          "pooled_wer": 0.036231884057971016,
+          "mean_cer": 0.010942534908700322,
+          "mean_wer": 0.03660714285714285,
+          "speaker_macro_cosine": 0.9839688204228878,
+          "truncated": 0,
+          "cer": 0.011086474501108648,
+          "wer": 0.036231884057971016,
+          "cosine": 0.9839688204228878,
+          "source_ids": [
+            "broader_paired_16"
+          ]
+        },
+        {
+          "policy": "broad-16",
+          "step": 16,
+          "group": "development",
+          "panel_id": "calibration80",
+          "character_errors": 163,
+          "characters": 4276,
+          "word_errors": 69,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.03811973807296539,
+          "pooled_wer": 0.10486322188449848,
+          "mean_cer": 0.03533460511320201,
+          "mean_wer": 0.09811490592740593,
+          "speaker_macro_cosine": 0.9824008690193295,
+          "truncated": 0,
+          "cer": 0.03811973807296539,
+          "wer": 0.10486322188449848,
+          "cosine": 0.9824008690193295,
+          "source_ids": [
+            "broader_paired_16",
+            "broader_audit_16",
+            "broader_results_16"
+          ]
+        },
+        {
+          "policy": "broad-16",
+          "step": 16,
+          "group": "custom",
+          "panel_id": "calibration80",
+          "character_errors": 16,
+          "characters": 902,
+          "word_errors": 7,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.017738359201773836,
+          "pooled_wer": 0.050724637681159424,
+          "mean_cer": 0.01587674543501611,
+          "mean_wer": 0.049107142857142856,
+          "speaker_macro_cosine": 0.983665443956852,
+          "truncated": 0,
+          "cer": 0.017738359201773836,
+          "wer": 0.050724637681159424,
+          "cosine": 0.983665443956852,
+          "source_ids": [
+            "broader_paired_16",
+            "broader_audit_16",
+            "broader_results_16"
+          ]
+        }
+      ],
+      "same_update_old16_comparator": {
+        "development": {
+          "character_errors": 203,
+          "characters": 4276,
+          "word_errors": 83,
+          "words": 658,
+          "recordings": 64,
+          "speakers": 16,
+          "pooled_cer": 0.047474275023386345,
+          "pooled_wer": 0.12613981762917933,
+          "mean_cer": 0.042138577006641545,
+          "mean_wer": 0.11722093011155511,
+          "speaker_macro_cosine": 0.9825276974588633,
+          "truncated": 0
+        },
+        "custom": {
+          "character_errors": 25,
+          "characters": 902,
+          "word_errors": 14,
+          "words": 138,
+          "recordings": 16,
+          "speakers": 1,
+          "pooled_cer": 0.02771618625277162,
+          "pooled_wer": 0.10144927536231885,
+          "mean_cer": 0.026533134083529468,
+          "mean_wer": 0.09480519480519481,
+          "speaker_macro_cosine": 0.9835002794861794,
+          "truncated": 0
+        }
+      },
+      "new_recordings": 160,
+      "reused_baseline_recordings": 80,
+      "latest_audited_step": 16,
+      "fitting_speakers_seen": 128,
+      "fitting_speakers_planned": 256,
+      "relationships": {
+        "old-0": "tradeoff",
+        "old-8": "tradeoff",
+        "old-16": "tradeoff",
+        "old-32": "tradeoff",
+        "broad-8": "tradeoff"
+      },
+      "both_groups_qualified": false,
+      "global_model_promoted": false,
+      "source_ids": [
+        "broader_audit_16",
+        "broader_results_16",
+        "broader_paired_16",
+        "broader_waveform_consistency_16"
+      ]
+    }
+  },
+  "experiment_families": [
+    {
+      "id": "original_audit",
+      "label": "Original 0.6B audit",
+      "purpose": "Establish what was actually trained.",
+      "change": "Recovered LoRA recipe, precision and selection behavior.",
+      "outcome": "0.6B used LoRA; merged export is not full-parameter fine-tuning. Older1.7B history remains separate.",
+      "status": "completed_audit",
+      "source_ids": [
+        "training_inventory",
+        "note_original_audit"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "optimization_precision",
+      "label": "Optimization / precision",
+      "purpose": "Improve trainable precision and check optimizer choices.",
+      "change": "FP32 trainable parameters/moments, ratio1 vs LoRA+ratio4, merge-precision diagnostics.",
+      "outcome": "Controlled comparisons completed; lower loss did not guarantee speech gains. Many literature alternatives were not executed.",
+      "status": "completed_mixed",
+      "source_ids": [
+        "training_inventory",
+        "note_optimization_precision"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "epochs",
+      "label": "Epoch continuation",
+      "purpose": "Test additional training and stop on speech regression.",
+      "change": "Fresh FP32 LoRA, optimizer-preserving epochs1–6, CER/WER at endpoints.",
+      "outcome": "Epoch3 development winner;4/5/6 triggered speech-regression patience while validation losses improved.",
+      "status": "completed_stopped",
+      "source_ids": [
+        "training_inventory",
+        "note_epochs"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "test_voice",
+      "label": "Test and voice investigation",
+      "purpose": "Check transfer and reference-voice drift.",
+      "change": "Initial epoch2/3 TEST30 comparison, later all-epoch expansion, base/adapted voice controls.",
+      "outcome": "Epoch3 did not beat2 on initial test; exploratory all-epoch ranking favored6. Base voice was closer in user comparison.",
+      "status": "completed_diagnostic",
+      "source_ids": [
+        "training_inventory",
+        "note_test_voice"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "targeted_pronunciation",
+      "label": "Targeted pronunciation adaptation",
+      "purpose": "Improve pronunciation while retaining halfway voice.",
+      "change": "Frozen halfway backbone, text-only LoRA and protected reference rows.",
+      "outcome": "Measured pilots/strength trials retained tradeoffs; no complete joint-goal pass.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "training_inventory",
+        "note_targeted_pronunciation"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "joint_preferences",
+      "label": "Joint preferences",
+      "purpose": "Use generated pronunciation/voice preferences.",
+      "change": "Raw sequence preference training with fixed reference and explicit conditions.",
+      "outcome": "Small-pool protected-text DPO did not satisfy the joint goal.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "alignment_inventory",
+        "note_joint_preferences"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "speaker_conditioning",
+      "label": "Speaker conditioning",
+      "purpose": "Adjust speaker conditioning without broad acoustic updates.",
+      "change": "Per-reference, balanced/refreshed and centered speaker adapters.",
+      "outcome": "Some local gains; broader checks left joint failures. Centered16 retained as later starting policy.",
+      "status": "completed_mixed",
+      "source_ids": [
+        "alignment_inventory",
+        "note_speaker_conditioning"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "reference_routing",
+      "label": "Reference routing",
+      "purpose": "Isolate voice drift in reference processing.",
+      "change": "Broad half-prefix, codec-only and speaker-plus-codec routing at strength0.5.",
+      "outcome": "Different pronunciation/voice tradeoffs; broad-prefix development tests used half recurrent PAD.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "alignment_inventory",
+        "note_reference_routing"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "middle_attention",
+      "label": "Middle attention",
+      "purpose": "Add bounded pronunciation capacity with speaker adapter frozen.",
+      "change": "Middle-layer Q/V LoRA and registered speech checks.",
+      "outcome": "Small-panel attention candidates did not establish complete joint-goal success.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "alignment_inventory",
+        "note_middle_attention"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "quality_preferences",
+      "label": "Quality-aware preferences",
+      "purpose": "Avoid fitting relative preferences with poor absolute quality.",
+      "change": "Quality filters and gradient-calibrated supervised weighting.",
+      "outcome": "Tested local preference/CE variants failed the joint speech criteria.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "alignment_inventory",
+        "note_quality_preferences"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "sampling",
+      "label": "Sampling",
+      "purpose": "Test residual codec sampling as an inference mechanism.",
+      "change": "Controlled residual-temperature variants with identical panels.",
+      "outcome": "Sampling changes did not establish joint-goal success and are not residual-CE training ablations.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "alignment_inventory",
+        "note_sampling"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "direct_voice",
+      "label": "Direct voice gradients",
+      "purpose": "Differentiate generated voice reward.",
+      "change": "Native codec gradient feasibility, memory-separated replay, bounded attention/speaker proposals.",
+      "outcome": "Gradient/replay feasibility verified; direct-voice quality candidates failed broader speech checks.",
+      "status": "completed_feasibility_and_failures",
+      "source_ids": [
+        "voice_inventory",
+        "note_direct_voice"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "profiles",
+      "label": "Reference profiles",
+      "purpose": "Optimize a small reference-specific conditioning vector.",
+      "change": "Local profile proposals, mean follow-up and fresh64 preference collection/DPO0/4/8/16.",
+      "outcome": "Fitting/voice improvements did not satisfy complete screen; DPO ended at update limit, no confirmation.",
+      "status": "completed_no_joint_pass",
+      "source_ids": [
+        "voice_inventory",
+        "note_profiles"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "weight_space",
+      "label": "Weight-space work",
+      "purpose": "Test specific weight-space mechanisms rather than arbitrary edits.",
+      "change": "Speaker-subspace diagnostic and target-only full-weight transfer; preserve preparation vs executed trial distinction.",
+      "outcome": "Transfer changed the tradeoff but custom pronunciation regressed; generic WSP capabilities were not implemented or claimed.",
+      "status": "completed_diagnostic_and_transfer",
+      "source_ids": [
+        "voice_inventory",
+        "note_weight_space"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "pad_full_panel",
+      "label": "PAD and full-panel routing",
+      "purpose": "Separate prefill from continuation conditioning.",
+      "change": "Custom half-prefix/full-PAD ablation and full114 centered/attention confirmations.",
+      "outcome": "Centered small26 screen passed; original114 failed. Attention full114 also failed. Development remained full-route fallback.",
+      "status": "completed_full_panel_failure",
+      "source_ids": [
+        "voice_inventory",
+        "note_pad_full_panel"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "real_supervision",
+      "label": "Real paired supervision",
+      "purpose": "Train pronunciation from real same-speaker targets.",
+      "change": "2718 eligible pairs,324 fresh features, native masked Q/V replay; v1 numerical stop then v2 separate registration.",
+      "outcome": "v2 completed0/8/16/32 with custom32 recovery but development failure. No original114 pilot confirmation or promotion.",
+      "status": "completed_update_limit_no_joint_pass",
+      "source_ids": [
+        "voice_inventory",
+        "note_real_supervision"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    },
+    {
+      "id": "observability",
+      "label": "Observability and reporting",
+      "purpose": "Make quality, provenance and improvement claims inspectable.",
+      "change": "Fixed probes, independent scores/hashes, matched audio sharing, data consistency, natural32 and raw-gradient controls.",
+      "outcome": "Complete audits distinguish integrity from quality; diagnostics do not change labels or thresholds. Sharing helper finds no unshared audited improvement.",
+      "status": "completed_ongoing_reporting",
+      "source_ids": [
+        "voice_inventory",
+        "note_observability"
+      ],
+      "metrics": null,
+      "metric_note": "Family spans multiple variants/panels; use chart datasets and complete source appendices, not one collapsed family score."
+    }
+  ],
+  "next_experiment": {
+    "status": "completed_failed",
+    "kind": "inference_only_2x2",
+    "checkpoints": [
+      0,
+      32
+    ],
+    "reference_routes": [
+      "full",
+      "broad_half_prefix_full_continuation_pad"
+    ],
+    "development_recordings_per_arm": 64,
+    "existing_full_control_arms": 2,
+    "new_half_arms": 2,
+    "planned_new_wavs": 128,
+    "reused_custom_recordings_per_endpoint": 16,
+    "training_updates": 0,
+    "launched": true,
+    "qualification_gates_changed": false,
+    "source_ids": [
+      "report",
+      "current_supervision",
+      "coverage_review"
+    ],
+    "limitations": [
+      "Custom recordings reused per endpoint with explicit shared provenance, not new independent samples.",
+      "Universal routing at checkpoint0 cannot fix its unchanged custom original114 failure."
+    ],
+    "protocol_sha256": "faaca2f70c9b47dd3a3373c5de0605a8a6d2bd1efe0cf2c0f952cba50c024ee9",
+    "protocol_path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/protocol.json",
+    "original_session_id": 23429,
+    "active": false,
+    "results_pending": false,
+    "exit_code": 0,
+    "qualified_for_confirmation": false,
+    "results_sha256": "e07ada42a68dbcca15e7acce2523b10b00ef33bde8e0b0eda9482059ab1cccc6"
+  },
+  "rendering_guards": [
+    "Never connect or pool different panel_ids as one comparable series.",
+    "Use separate axes for loss, CER/WER and voice cosine.",
+    "Label calibration qualification as provisional; no original114 pilot result exists.",
+    "Charts are selected summaries; embed/link all evidence appendices for exhaustive variants and failed/prepared histories.",
+    "Do not call a completed integrity audit a quality pass."
+  ],
+  "source_appendices": [
+    "docs/experiments/0.6b/evidence/training.md",
+    "docs/experiments/0.6b/evidence/alignment.md",
+    "docs/experiments/0.6b/evidence/voice-and-supervision.md",
+    "docs/experiments/0.6b/evidence/ci-portability.md"
+  ],
+  "sources": {
+    "training_inventory": {
+      "path": "docs/experiments/0.6b/evidence/training.md",
+      "sha256": "6043dddbdbb4082482805fb38550914bb669e5504c6a6656c76a6444975eb877",
+      "section": "Fixed-probe losses; quantitative appendices A/B/C",
+      "kind": "repository_document"
+    },
+    "alignment_inventory": {
+      "path": "docs/experiments/0.6b/evidence/alignment.md",
+      "sha256": "73de40345f8338f7740fe98dd6e47051fb88e46ddbe4286b50881d870a27ab64",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "voice_inventory": {
+      "path": "docs/experiments/0.6b/evidence/voice-and-supervision.md",
+      "sha256": "97972886de08cc285cbf6f06238c7f77681bf204c0ae545d3c53ce237e871f3a",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "report": {
+      "path": "docs/experiments/0.6b/report.md",
+      "sha256": "13c3087b6d13d95d9d0a38f00bf4884b5a0d3bb85d83ab016ba3744504817cdc",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "current_supervision": {
+      "path": "docs/0.6b-reference-masked-supervision.md",
+      "sha256": "cf0dc452218dcebd3f8e0e83dd5202342942b74f7ede32f126b1d2e7eef91479",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "sharing": {
+      "path": "docs/0.6b-result-sharing.md",
+      "sha256": "478621c0bbbcfb5386c8714e2ca7a00d0c0dc16e4e29841b54bfb6e305379889",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "final_error_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-final-error-review-v1.md",
+      "sha256": "300190a5ba01728a6df767f68f07d7cda0c128226ab825e85d5ba5585e418ff2",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "coverage_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-broader-coverage-review-v1.json",
+      "sha256": "321b6a0031bf787c298940c86a8a1c7c5324f48a3324914dbbe29ff70f9c5948"
+    },
+    "centered114": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-prefix-generation-pad-confirmation/speech/results.json",
+      "sha256": "f6ac5ed48e2681fb91589e0e1a9737b7df9678c85f834aa5e85beaeb857200d8",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "attention114baseline": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-prefix-lora-pad/baseline/results.json",
+      "sha256": "84509f277ba6a30ca72146ec9bba6886b2d8b71ba24db5ff46a5e3d6ed78f7c4",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "attention114candidate": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-prefix-lora-pad/candidate/results.json",
+      "sha256": "01132883192d4cb71b726540e28c81ac847d7f15407d173a91f75bca04a1519b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "masked_audit_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000000.json",
+      "sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "teacher_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000000.json",
+      "sha256": "795be119d5b6f906dd9541eb505f44d8879a17006c2e91c55959b6f904abaae6",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "masked_audit_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000008.json",
+      "sha256": "39a6abe9e7c634ab0ae09db82fd413e05fda3796ac50603d54fe73809260b115",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "teacher_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000008.json",
+      "sha256": "e9316d7720bd87384364aedd2f59eda42e9baf58481e0eaad246657a958afcb5",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "masked_audit_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000016.json",
+      "sha256": "a06384f2d7ec0f967711ad9f4190456f52e1380889596a9ee9eb833c5d477b55",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "teacher_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000016.json",
+      "sha256": "252c136e07a8465c4b835c609508f3cc49f2f58e3499ad7ac256476d7df136bd",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "masked_audit_32": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000032.json",
+      "sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "teacher_32": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000032.json",
+      "sha256": "2dfd1d7ff1a34ea10bbbdf4790c5f6c37ab160da1d710bf8b6118b943a29f54b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "natural32_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-calibration-natural-asr-v1/verification.json",
+      "sha256": "32b90e0c985842039ccfbdf7fa8743e6f206d0e1bd43aeb17e1a8750939f02ea",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "gradient_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-gradient-probe-independent-audit-v1.json",
+      "sha256": "2bf2efa4fbbbff80af20aff5e479a43cd50b42a42bec3b53d1bacd2f122ac03e",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "gradient_cross_mode": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-gradient-cross-mode-v1.json",
+      "sha256": "cd7a13c8adc518401a193292bdb250f040be151b9fe723d4da3109844a07cadf",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "note_original_audit": {
+      "path": "docs/0.6b-training-analysis.md",
+      "sha256": "1b6d0bfbcadf06e40d8cab9fecf978ec0b89565942a30d87f54231b2f3879c16",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_optimization_precision": {
+      "path": "docs/0.6b-lora-literature.md",
+      "sha256": "f99182e68061a7c34710435f431f37cbb57e3f1744a41437fe76e70d59d611b1",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_epochs": {
+      "path": "docs/0.6b-until-overfit.md",
+      "sha256": "aabd1489e3d110eab67f8dce4b70c809b8247fc2dd209d7eec2c1a26997987dd",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_test_voice": {
+      "path": "docs/0.6b-voice-reference-analysis.md",
+      "sha256": "16715e5fce74a5afbf7d66c097f3e65831d52379ee13868fdb34f42b4a0d61f0",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_targeted_pronunciation": {
+      "path": "docs/0.6b-reference-protected-training.md",
+      "sha256": "94fd7bc10bd87a4b7e53d2c1bbbe4d8e660197777615a6703d022a9e464bcb2d",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_joint_preferences": {
+      "path": "docs/0.6b-joint-preference-training.md",
+      "sha256": "d1842c51c6c6ceefab66d8c506e6f316928969149e39360c905efe6f18de9e58",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_speaker_conditioning": {
+      "path": "docs/0.6b-centered-speaker-preferences.md",
+      "sha256": "052b0d2813a41418e590392b69830e83fb1644c2d8137e1ca15e4904eb68b94e",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_reference_routing": {
+      "path": "docs/0.6b-reference-prefix-routing.md",
+      "sha256": "ab2f4fee1368e87116782b0daf01dc158c40828b73717696e59b1a91f16bcc76",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_middle_attention": {
+      "path": "docs/0.6b-middle-attention-preferences.md",
+      "sha256": "804042d1a401db333e01672ff1add618f39f06738eef45f127e157d5ef949d81",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_quality_preferences": {
+      "path": "docs/0.6b-calibrated-quality-preferences.md",
+      "sha256": "f34e16d44fa194f167412152390d5c148336f33fdf70772d500772914d11d6c2",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_sampling": {
+      "path": "docs/0.6b-residual-sampling-calibration.md",
+      "sha256": "7a7a90cd58a482e13516f51586a98f1f574476592b9256e091908fd49c422e6b",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_direct_voice": {
+      "path": "docs/0.6b-direct-voice-pilot.md",
+      "sha256": "d7760aff849b78fac3e5142ef9f1b96d7d6901972f978f7d88bcf9a85e7daa19",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_profiles": {
+      "path": "docs/0.6b-reference-profile-preferences.md",
+      "sha256": "b01bd622d90d93d0af75831979574b482b14614e1cb346df626ad8c7bee95f88",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_weight_space": {
+      "path": "docs/0.6b-joint-goal-literature.md",
+      "sha256": "2bb83fadd22c9954df84d8694cb80dacbcfd43cee80aa8efd03c03e9f6a34917",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_pad_full_panel": {
+      "path": "docs/0.6b-attention-pad-full-panel-findings.md",
+      "sha256": "3878c50adea4281eefa653e00786b8dac0d4bc6946f65487ab336262f5ccdfa3",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_real_supervision": {
+      "path": "docs/0.6b-reference-masked-supervision.md",
+      "sha256": "cf0dc452218dcebd3f8e0e83dd5202342942b74f7ede32f126b1d2e7eef91479",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "note_observability": {
+      "path": "docs/0.6b-result-sharing.md",
+      "sha256": "478621c0bbbcfb5386c8714e2ca7a00d0c0dc16e4e29841b54bfb6e305379889",
+      "section": null,
+      "kind": "repository_document"
+    },
+    "routing_0_full_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000000/results.json",
+      "sha256": "3f8f1680f4e687650580888e6c770bc41f31dfcba7f5b96fe2363a779bce3ab4",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_0_full_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000000.json",
+      "sha256": "c6d8e5e7390a10b50eb391513998d727afc392d86bf90d6500bbf4eaf140c72b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_0_half_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/half-development-000000/results.json",
+      "sha256": "e721e8162a0eee5c4ca30e795f9fcac091a51d5fb092fb75f4e28ec8cf94a44b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_0_half_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/verification-000000.json",
+      "sha256": "cbfc62346baa8c4f1621c2c0ece6681d26ac1aa86b8e0953b7f50e747a23590b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_32_full_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/eval-000032/results.json",
+      "sha256": "f4f187cd971c8c5f9f23a17f74f9506c365bb1b4faa4051804d431f0a13d2df5",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_32_full_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/verification-000032.json",
+      "sha256": "9fd25e34176efe729c5c2ba5b949457b89fb96c14ba3c845eee0953de7bb0baf",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_32_half_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/half-development-000032/results.json",
+      "sha256": "0d173577b853267ef0b36655607f4d4048a63ac98675d586a2c48f95ed587ad4",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_32_half_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/verification-000032.json",
+      "sha256": "1d0f06317eac78c2b2d380e302542089cdeeb6e41040295dd87611600f0fb262",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_final_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/results.json",
+      "sha256": "e07ada42a68dbcca15e7acce2523b10b00ef33bde8e0b0eda9482059ab1cccc6",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1/protocol.json",
+      "sha256": "faaca2f70c9b47dd3a3373c5de0605a8a6d2bd1efe0cf2c0f952cba50c024ee9",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_closed": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-routing-ablation-v1-process-closed.json",
+      "sha256": "fbcc3dcb5ffeac98636dd0254bebc80d808cf698365522861c6ec0338c2841ef",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "routing_scalar_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-routing-final-findings-v1.md",
+      "sha256": "95603e2e23fed3a404f160931b54a27943ca21d00465c8fc0906b8b3e6849b2b",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "kv_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-kv-probe-v1/results.json",
+      "sha256": "91bfa85483a94ebab2c8e5e2fc108bfc6e22e366302e4b4a1a89b5ad53f0a266",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "kv_structural": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-kv-probe-v1/structural-verification.json",
+      "sha256": "9c38f0128cf35d2a9ca92cfaf210040bf39c65cb6d5233e586d4d7021b2429f9",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "kv_scored": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-kv-probe-v1/scored.json",
+      "sha256": "af3cc9f29afec80e196cbe701cbca4a69d3a6a8d9550685fa1b973a020c845b7",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "kv_closed": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-kv-probe-v1-process-closed.json",
+      "sha256": "a9cd311c563d957aa28a77eed43c4fdeffe5a2f94eaee31e72fb3133f9c757b9",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "kv_independent_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-kv-final-findings-v1.json",
+      "sha256": "3ff7b1defe1be2efc9837d0d943d110e85ac65e0e6099b498f565f9e9569856d",
+      "section": null,
+      "kind": "external_saved_evidence"
+    },
+    "base_kv_launch": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-base-kv-v1-launch-handle.json",
+      "sha256": "929e29f91e316548ff20c0e50e0b56b44be9a3cbbe8b4a2b8da8e65b6b2f5363",
+      "description": "Original-base KV live launch receipt; not closure or quality evidence."
+    },
+    "coverage_review_note": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-broader-coverage-review-v1.md",
+      "sha256": "ce8cde57d8afb3ca7ad577a056684b61a3deb789ee7b04d3b956a9dce184fd37"
+    },
+    "selection_origin": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-selection-origin-addendum-v1.json",
+      "sha256": "02c26f5e91972dac2340adecd6acdabcaf53909fafe642f9d11541b8b37d6cf9"
+    },
+    "selection_origin_note": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-selection-origin-addendum-v1.md",
+      "sha256": "dec933b09abff83bbe1476776222afabe761b8096e52f9012fb49faa4e18a93e"
+    },
+    "previously_inspected_test30": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1beb0-7b7b-7f73-993e-71ad9a8eefd3/hojil-17b-recovery/cohorts/unseen-test.jsonl",
+      "sha256": "187c8dd03b560e90e62594e9ecc6d452f3985d3c241d64efadb2d1fb6b54e112"
+    },
+    "coverage_independent_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-broader-coverage-independent-review-v1.json",
+      "sha256": "4bb286103994a482ac8f95fbc8059fc4b59f54c3d1728c487212d2c34328e448"
+    },
+    "broad_data_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-data-v1/protocol.json",
+      "sha256": "661f5fa536e01d198f757c007ee0c64b232029f009f813d301e486ebe2165bcc"
+    },
+    "broad_data_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-data-v1/audit.json",
+      "sha256": "d6af64860dc1e93e9568fabd3471890894ebcd347dbe302bc6a126b54ecb299e"
+    },
+    "broad_data_closed": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-data-v1-process-closed.json",
+      "sha256": "8ce5933726bc3877bb413262e03f8c0f1eb2f5ed4fdf433a0edf8424abe3bd30"
+    },
+    "base_kv_results": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-base-kv-v1/results.json",
+      "sha256": "29af2c754dd340be50674d2aebb5ed30a6a484d87e31038a4ad82f7ca8145e61"
+    },
+    "base_kv_native_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-base-kv-v1/native-verification.json",
+      "sha256": "8d9bc659aa4bcefa91d7e58b740f7c674ea3563129dd14fb716c5773236cbe5b"
+    },
+    "base_kv_independent_review": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/base-kv-final-independent-review-v1.json",
+      "sha256": "621f98fe013a9ac79f42e845d8628226eb5a0bbdd5e182a5022537327fbe0df8"
+    },
+    "base_kv_closed": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-base-kv-v1-process-closed.json",
+      "sha256": "15b0262b494eab15b1f0bb1b099de9fb9670b676bed59b4bcb76ddae672c33d9"
+    },
+    "broad_features_launch": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-features-v1-launch-handle.json",
+      "sha256": "c0252a7227a9da10bcc326ea47ee9e1a71f8f884d0de1131e36caebfe5d93421"
+    },
+    "broad_features_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-features-v1/protocol.json",
+      "sha256": "01247c5a5176b0938d57414c4fe248a24531ba83e0acea3b045127083065963e"
+    },
+    "natural32_cosine": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/natural-calibration32-reference-cosine-v1.json",
+      "sha256": "9ec8aa7ddb95a0323fd0d1b096bd747bdb4dc566cf37431f6a905a134d4b8ed2"
+    },
+    "natural32_cosine_note": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/natural-calibration32-reference-cosine-v1.md",
+      "sha256": "292bc9697217e09a40df73271d3dd84c659f007e1ad989675b6bcf2144aeed6d"
+    },
+    "broad_data_independent_physical_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/masked-supervision-broad-data-independent-audit-v1.json",
+      "sha256": "a648df706a07e50b6835bdd1550710cbaa7194c65f29547ceb4a4fc3efbf8c7d"
+    },
+    "broad_features_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-features-v1/verification.json",
+      "sha256": "b3ae2ac332ac82f263a1e63c29798993522464e903781324d99c9febdd71e98e"
+    },
+    "broad_features_closed": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-features-v1-process-closed.json",
+      "sha256": "b190c4624be1398ca6529c3467758a73d9fc2183feca91ac0f6e45ff552ec0a7"
+    },
+    "broad_features_extraction": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-features-v1/extraction.json",
+      "sha256": "fc37b458b0eefe28124bd05d3339fc7241ffe471a9b489e8c834b6d9dcd0c7f2"
+    },
+    "broad_training_inputs": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1-inputs.json",
+      "sha256": "fd8a504ab2567e4cecefc6a91e3eb91961329e31db1a501a1f9887a8b882ddec"
+    },
+    "broad_training_driver": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/run-reference-masked-supervision-broad-training-v1.py",
+      "sha256": "50e9b3ebd22b6e14204abb8350843b0fa9a35cffcc57fd1946c7e6beaff18b63"
+    },
+    "broad_features_independent_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-features-independent-audit-v1.json",
+      "sha256": "a62a09e9132afdc348d89454c0e6d5e9e4a7ca5d92076aeda5c698cc983f7865"
+    },
+    "broad_training_launch": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1-launch.json",
+      "sha256": "aa15f517487b78b5b05945373da9bdfdc027661876b4b47cd63a824dc6439549"
+    },
+    "broader_memory_preflight": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1-memory.json",
+      "sha256": "5416be81de22523a181efaee0e8300a582ed10d1a26f300fdeb4a41e706a28a4"
+    },
+    "wheel_packaging_verification": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/packaging-wheel-fix-verification-v1/verification.json",
+      "sha256": "5b025ff73a708d5e27544050ec6ec65f60746d1319905cc512a5fa57dd27c83f"
+    },
+    "ci_portability_inventory": {
+      "path": "C:/Users/Khan/Documents/ChatGPT/hojil-tts/docs/experiments/0.6b/evidence/ci-portability.md",
+      "sha256": "c7eca73d907a0fbc7483ef61c8e8523f727de0188d1ff9bea3400116c217010a"
+    },
+    "broader_training_protocol": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/protocol.json",
+      "sha256": "ab7c2e7da83a76e7da83a9765e015f778f0db4cc0ccf77cfefc1f7968d65f03d"
+    },
+    "broader_native_controls": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/native-verification.json",
+      "sha256": "b6f112d94aa2c6b276ee09e84a3e5aaf625d1d1524e13165e81c4a0c70e85750"
+    },
+    "broader_shared_baseline": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/verification-000000.json",
+      "sha256": "df0e44fec1860eeeb00c1e495aeb15eb7a7e3fa9c109a4bc39b7d67cd130ed7e"
+    },
+    "broader_zero_teacher_comparison": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-training-zero-teacher-comparison-v1.json",
+      "sha256": "9ebac7cda99adace720a4081e378c4ec3c7160164e1072b4b146c4ac46d59569"
+    },
+    "conditional_literature_followup": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/pronunciation-speaker-literature-followup-2026-11-11-v1.md",
+      "sha256": "abc83fd10004dc6096c8bf0091a1d39eec2d6bb4972a50f03482d7e18bbb7dfe"
+    },
+    "broader_teacher_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/teacher-000000.json",
+      "sha256": "6a15e1bed160e55db0f0626ce95b2ffbadb51825e235b623e16a523188c41ae7"
+    },
+    "broader_teacher_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/teacher-000008.json",
+      "sha256": "118248268b7695176cb96fc0ad5cba7c65d11e251024fd96b4ac57ca077736e3"
+    },
+    "prior_teacher_0": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000000.json",
+      "sha256": "795be119d5b6f906dd9541eb505f44d8879a17006c2e91c55959b6f904abaae6"
+    },
+    "prior_teacher_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000008.json",
+      "sha256": "e9316d7720bd87384364aedd2f59eda42e9baf58481e0eaad246657a958afcb5"
+    },
+    "broader_checkpoint8_receipt": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/checkpoint-000008.json",
+      "sha256": "5ba45853fe09df9a4a1160470a20876edd4be65b13a1b7596d98429f4335b30e"
+    },
+    "broader_update_1": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000001.json",
+      "sha256": "9f1fa4dbb1b64efb6c8f9bde88140cee8a5243e0f5c028455d993caf31012559"
+    },
+    "broader_update_2": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000002.json",
+      "sha256": "7dff74f370ea072b9246875ac9fdc161623a219086b53a04cd3e705f2b1cd01a"
+    },
+    "broader_update_3": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000003.json",
+      "sha256": "ac7921d5c54b918d097fa3db3215cd770876f66efab540fd2e80ea231632e728"
+    },
+    "broader_update_4": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000004.json",
+      "sha256": "3d289a7df741f8ebd8a50c1fce33d808c5d1ddd4512ec83dd521d974b99cd287"
+    },
+    "broader_update_5": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000005.json",
+      "sha256": "a223445e39dc8ba847170ed789e9c47442d5b9082e2fe219d590bf770f661a51"
+    },
+    "broader_update_6": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000006.json",
+      "sha256": "b40fe50f6a59e1166e2f591c86c2e192f33641f79105ce04de1171c0993afcfe"
+    },
+    "broader_update_7": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000007.json",
+      "sha256": "9f55de4be961ddae811e1d28787541d576c88069abb9a11ed622d02937af6d8c"
+    },
+    "broader_update_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000008.json",
+      "sha256": "fcc8826ebbd76d48c975dc931f104743e1985b0a19708430794b6cd8f253caae"
+    },
+    "broader_audit_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/verification-000008.json",
+      "sha256": "f4d88af93bf00662656e78faf0c77c6400e22d1f823414b73d73c2bc183ede1b",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_results_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/eval-000008/results.json",
+      "sha256": "255d2b9fbdafc77ba750a0ca6bcaea6c76167d956d2c4af75b121dc092f5e873",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_paired_8": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-calibration-paired-step000008-v1.json",
+      "sha256": "0d99f34da0c3450b08744af47450ea67b639d382d24d03fe33e9cd0f1ea24a6f",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_paired_analyzer": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/analyze-broad-calibration-pairs-v1.py",
+      "sha256": "fdc2e1ce3fdf435856480433b2d79ab370c67028d038453eb587e8c221412a9d",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_checkpoint8_independent_audit": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-checkpoint8-independent-audit-v1.json",
+      "sha256": "9141c79135c5239ec4afd3d7c4656e9df32e444a2141555979e7ff1911eb27b8",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_confirmation_readiness": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-confirmation-readiness-2026-11-12-v1.md",
+      "sha256": "6a64a54c9af19917f56ce6360c106281b95d7164807bce807e8fcb61defcd9b4",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_audit_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/verification-000016.json",
+      "sha256": "6649019e5faaf004e58ea5de44fdac089b0533e1f572ff070ef77ffedd7f1b54",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_results_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/eval-000016/results.json",
+      "sha256": "65f884b4161671096172ace8880041891b6b4da589488708e4ec70575b3ac3ba",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_paired_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-calibration-paired-step000016-v1.json",
+      "sha256": "ec897936a0ba64d37296bd20d0d1fc5863026593272d119fff89c7eb3dd29cd0",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_waveform_consistency_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/broad-calibration-step16-waveform-consistency-v1.json",
+      "sha256": "147707d24e8e52ca9b4fc4eda847314d678378b75d1effb40c7d842d6849271c",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_teacher_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/teacher-000016.json",
+      "sha256": "44ab0536d72171e44cbef6f9dcb71238dc0c0b91e6c108fe50cda298d38ca759",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "prior_teacher_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-v2/teacher-000016.json",
+      "sha256": "252c136e07a8465c4b835c609508f3cc49f2f58e3499ad7ac256476d7df136bd",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_checkpoint16_receipt": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/checkpoint-000016.json",
+      "sha256": "08827eaf38f8956fd7ed11892f75d50756a3dc7f11a16a1e164e4e13caeb0020",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "fitting_gpu_feasibility": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/fitting-gpu-rollout-feasibility-2026-11-12-v1.md",
+      "sha256": "830197301e2521fa84d9f1b39dde3b2e1983f17461d7edd06c9a9268c6eba196",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_9": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000009.json",
+      "sha256": "d56c05d5bbc6ece49eb4c80048f2e19b5f5d0897668be55dcadaa6779c203af9",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_10": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000010.json",
+      "sha256": "e132204000668a7e25a4fa530a2e9e2a8c7383971615f02b62773468dc735566",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_11": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000011.json",
+      "sha256": "3a784aa5fabea0942aea3f4446c0010ce5b2ec7ef5f460a9e738520e9475d237",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_12": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000012.json",
+      "sha256": "b728726791ba243293f23ffabb70096041656a944192afb588543a9919e47a57",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_13": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000013.json",
+      "sha256": "2ef2875df8db70603c00085de7ab8de7108d055001fa74f9699b79c0be169a86",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_14": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000014.json",
+      "sha256": "c130bd7deddfb406bd6b91239bde156853fee41d12f7761524cf267600b3ae64",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_15": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000015.json",
+      "sha256": "24aa8921a33d2be35730898e16206e04388a1567e44c26a7db4ca5fbd23c2a17",
+      "section": null,
+      "kind": "external_evidence"
+    },
+    "broader_update_16": {
+      "path": "C:/Users/Khan/.codex/visualizations/2026/11/09/01a1bf77-0b17-7391-9781-f859f1fbb0b1/reference-masked-supervision-broad-training-v1/update-000016.json",
+      "sha256": "09e13b88767f627b95efd03b8e7271cd8d6c4963f1c9702dc6bd411a6b0975af",
+      "section": null,
+      "kind": "external_evidence"
+    }
+  },
+  "next_preparation": {
+    "kind": "fitting_only_kv_probe",
+    "status": "completed",
+    "launched": true,
+    "optimizer_updates": 0,
+    "quality_result": null,
+    "active": false,
+    "results_pending": false,
+    "original_session_id": 35473,
+    "protocol_sha256": "8e4878d8f82b9c0b3feee353609e617fb84c50fb719b8fb15178cc2ce155a58a",
+    "result": "diagnostic_no_waveform_effect",
+    "exit_code": 0,
+    "results_sha256": "91bfa85483a94ebab2c8e5e2fc108bfc6e22e366302e4b4a1a89b5ad53f0a266",
+    "fitting_pairs": 2,
+    "recordings": 16
+  },
+  "next_planned_experiment": {
+    "kind": "original_base_kv_calibration80",
+    "status": "completed_failed",
+    "recordings": 80,
+    "active": false,
+    "results_pending": false,
+    "launched": true,
+    "registered": true,
+    "optimizer_updates": 0,
+    "quality_result": "rejected_development_regression",
+    "original_session_id": 14712,
+    "protocol_sha256": "ca108055567fe14bc34ea28fcccf76b2654f01ce33c83c284c148c20a3d2cb84",
+    "phase": "complete",
+    "stages": [
+      {
+        "stage": "controls",
+        "count": 8
+      },
+      {
+        "stage": "original_base_prefill_donors",
+        "count": 40
+      },
+      {
+        "stage": "calibration_recordings",
+        "count": 80
+      }
+    ],
+    "completed_controls": 8,
+    "completed_donor_prefills": 40,
+    "exit_code": 0,
+    "calibration_qualified": false,
+    "results_sha256": "29af2c754dd340be50674d2aebb5ed30a6a484d87e31038a4ad82f7ca8145e61"
+  },
+  "diagnostics": {
+    "kv_probe": {
+      "status": "completed",
+      "result": "diagnostic_no_waveform_effect",
+      "scope": "Two fitting probes, two reference modes, one seed; not generalization evidence.",
+      "fitting_pairs": 2,
+      "reference_modes": [
+        "full",
+        "half"
+      ],
+      "seeds": [
+        2026
+      ],
+      "recordings": 16,
+      "comparison_recordings": 12,
+      "self_graft_controls": 4,
+      "student_graft_comparisons": 4,
+      "identical_student_graft_waveforms": 4,
+      "identical_student_graft_cosines": 4,
+      "identical_student_graft_asr_scores": 4,
+      "teacher_identity_controls_passed": 4,
+      "native_cosine_recomputation_error": 0.0,
+      "optimizer_updates": 0,
+      "original_session_id": 35473,
+      "exit_code": 0,
+      "source_ids": [
+        "kv_results",
+        "kv_structural",
+        "kv_scored",
+        "kv_closed",
+        "kv_independent_review"
+      ],
+      "matches": [
+        {
+          "pair_id": "cv27:common_voice_mn_18578648.mp3",
+          "reference_mode": "full",
+          "student_graft_wav_equal": true,
+          "student_graft_cosine_equal": true,
+          "student_graft_asr_equal": true,
+          "student_graft_scores_equal": true,
+          "teacher_self_graft_control_pass": true
+        },
+        {
+          "pair_id": "cv27:common_voice_mn_18578648.mp3",
+          "reference_mode": "half",
+          "student_graft_wav_equal": true,
+          "student_graft_cosine_equal": true,
+          "student_graft_asr_equal": true,
+          "student_graft_scores_equal": true,
+          "teacher_self_graft_control_pass": true
+        },
+        {
+          "pair_id": "cv27:common_voice_mn_35625884.mp3",
+          "reference_mode": "full",
+          "student_graft_wav_equal": true,
+          "student_graft_cosine_equal": true,
+          "student_graft_asr_equal": true,
+          "student_graft_scores_equal": true,
+          "teacher_self_graft_control_pass": true
+        },
+        {
+          "pair_id": "cv27:common_voice_mn_35625884.mp3",
+          "reference_mode": "half",
+          "student_graft_wav_equal": true,
+          "student_graft_cosine_equal": true,
+          "student_graft_asr_equal": true,
+          "student_graft_scores_equal": true,
+          "teacher_self_graft_control_pass": true
+        }
+      ],
+      "quality_frontier_eligible": false,
+      "limitations": [
+        "Teacher0 is already adapted, not the original base.",
+        "No observed waveform effect in four fitting conditions does not imply reference KV never matters.",
+        "No new best or original114 qualification; tiny fitting scores are not generalization evidence."
+      ],
+      "identical_student_graft_codec_eos": 4
+    },
+    "data_coverage": {
+      "status": "selected512_wavs_and_fresh_features_verified",
+      "quality_result": null,
+      "training_ready": false,
+      "new_features_extracted": true,
+      "new_training_launched": false,
+      "selection": "Deterministic speaker hashes, then all original rows for the 48 fitting speakers; not first 2,800 rows or random row sampling.",
+      "filter_flow": [
+        {
+          "label": "Original training cohort",
+          "pairs": 28001,
+          "speakers": 435
+        },
+        {
+          "label": "Preference allocation",
+          "speakers": 64,
+          "validation_speakers": 16,
+          "fitting_speakers": 48
+        },
+        {
+          "label": "All rows of fitting speakers",
+          "pairs": 2800,
+          "speakers": 48
+        },
+        {
+          "label": "Exclusions + reference closure",
+          "pairs": 2718,
+          "speakers": 47
+        },
+        {
+          "label": "Actual 32-update schedule",
+          "pairs": 201,
+          "speakers": 47,
+          "visits": 256
+        }
+      ],
+      "existing": {
+        "eligible_pairs": 2718,
+        "eligible_speakers": 47,
+        "scheduled_unique_pairs": 201,
+        "scheduled_speakers": 47,
+        "pair_visits": 256,
+        "updates": 32,
+        "speakers_with_6_visits": 21,
+        "speakers_with_5_visits": 26,
+        "scheduled_assets": 265
+      },
+      "proposed": {
+        "metadata_pool_pairs": 24369,
+        "metadata_pool_speakers": 414,
+        "hypothetical_updates": 32,
+        "hypothetical_pair_visits": 256,
+        "hypothetical_unique_pairs": 256,
+        "hypothetical_speakers": 256,
+        "selected_assets": 512,
+        "overlap_with_existing_feature_assets": 52,
+        "fresh_fitting_features_planned": 512,
+        "unchanged_real_calibration_assets": 55,
+        "unchanged_custom_reference_assets": 1,
+        "preparation": "Fresh512 features and controls passed;8updates/64distinctspeakers complete, checkpoint8 calibration80 generation active.",
+        "schedule_prepared_verified": true,
+        "selected_wavs_physical_audit_passed": true,
+        "native_feature_stage": "completed",
+        "selected_unique_pairs": 256,
+        "selected_speakers": 256
+      },
+      "limitations": [
+        "The pilot already balanced visits across all 47 eligible speakers.",
+        "Full24,369-pair media remains unaudited. Selected512 assets/features passed audits; training is active but no positive checkpoint speech audit is available yet.",
+        "All 512 fitting features are planned fresh; the 52-asset overlap is diagnostic, not permission to reuse old tensors.",
+        "Additional fitting speakers are not necessarily unseen to historical model adaptation."
+      ],
+      "source_ids": [
+        "coverage_review",
+        "coverage_review_note",
+        "selection_origin",
+        "selection_origin_note",
+        "coverage_independent_review",
+        "broad_data_protocol",
+        "broad_data_audit",
+        "broad_data_closed"
+      ],
+      "previously_inspected_test30": {
+        "source_id": "previously_inspected_test30",
+        "cohort_sha256": "187c8dd03b560e90e62594e9ecc6d452f3985d3c241d64efadb2d1fb6b54e112",
+        "previously_inspected": true,
+        "untouched_test_set": false,
+        "broader_speaker_overlap": 0,
+        "broader_target_reference_text_conflicts": 0,
+        "broader_target_reference_identity_conflicts": 0,
+        "review_receipt_source_id": "coverage_independent_review"
+      },
+      "physical_audit_scope": "512 selected WAVs only; full 24,369-pair pool metadata-only",
+      "selected_wavs_verified": 512,
+      "fitting_probes": 16,
+      "probes_subset_of_schedule": true,
+      "preparation_session_id": 51327,
+      "preparation_exit_code": 0,
+      "optimizer_updates": 0,
+      "native_feature_extraction_launched": true,
+      "native_feature_extraction_completed": true,
+      "feature_completion_evidence": "Completed native extraction and byte/tensor/native-ID audit; process45998 exit0. Audit does not independently re-extract every codec/speaker feature."
+    },
+    "natural_calibration_cosine": {
+      "recording_distribution": {
+        "count": 32,
+        "mean": 0.9868770353496075,
+        "minimum": 0.9664143919944763,
+        "median": 0.987650990486145,
+        "maximum": 0.995668888092041,
+        "below_0_984": 10,
+        "equal_0_984": 0,
+        "above_0_984": 22
+      },
+      "speaker_macro_cosine": 0.9868770353496075,
+      "speaker_mean_distribution": {
+        "count": 16,
+        "mean": 0.9868770353496075,
+        "minimum": 0.9750473201274872,
+        "median": 0.9892808645963669,
+        "maximum": 0.9936589896678925,
+        "below_0_984": 4,
+        "equal_0_984": 0,
+        "above_0_984": 12
+      },
+      "natural_pairs": 32,
+      "speakers": 16,
+      "real_assets_verified": 55,
+      "custom_included": false,
+      "baseline_generated_development": {
+        "recordings": 64,
+        "seeds": [
+          2026,
+          2027
+        ],
+        "speaker_macro_cosine": 0.9825698668137193,
+        "natural_minus_generated": 0.004307168535888195
+      },
+      "limitations": [
+        "Natural same-speaker pairs are descriptive, not a ceiling or a quality pass.",
+        "No paired natural target exists for the supplied custom reference.",
+        "No model, native speaker extraction or ASR inference was rerun.",
+        "Full feature provenance relies on the bound completed native extraction/audit; this script rechecks selected files, tensors and real WAVs, not all backbone weights.",
+        "Generated comparison has two seeds per text; natural observations are one per target/reference pair.",
+        "Speaker and reference reuse create dependence; no inferential significance claim."
+      ],
+      "status": "completed_cached_tensor_diagnostic",
+      "source_ids": [
+        "natural32_cosine",
+        "natural32_cosine_note"
+      ],
+      "peer_review": "Independent stdlib source/evidence/arithmetic review passed, exit0 chunk11bf12; no independent tensor cosine recomputation by reviewer."
+    },
+    "broader_memory_preflight": {
+      "status": "verified",
+      "measurements": 8,
+      "peak_reserved_bytes": 5821693952,
+      "peak_reserved_gib": 5.421875,
+      "finite_fitting_gradients": true,
+      "calibration_backward_calls": 0,
+      "optimizer_updates": 0,
+      "all_parameters_restored": true,
+      "source_ids": [
+        "broader_memory_preflight"
+      ],
+      "quality_result": null
+    },
+    "broader_native_controls": {
+      "status": "verified",
+      "historical_waveforms_exact": 2,
+      "trajectory_parity_checks": 12,
+      "weights_restored": true,
+      "cpu_rng_restored": true,
+      "shared_baseline_fresh_recordings": 0,
+      "shared_baseline_reused_recordings": 80,
+      "teacher_calibration_pairs": 32,
+      "teacher_modes_per_pair": 2,
+      "teacher_calibration_exact_equal": true,
+      "teacher_calibration_objective": 3.426517192274332,
+      "cross_run_fitting_loss_comparison": false,
+      "source_ids": [
+        "broader_native_controls",
+        "broader_shared_baseline",
+        "broader_zero_teacher_comparison"
+      ]
+    },
+    "broader_update8": {
+      "status": "training_segment_and_complete80_speech_audit_completed",
+      "step": 8,
+      "checkpoint_sha256": "5467984fbdc9db2c0b44ce21132346b3272a5a6c90cc260a383fae33dd94a6c7",
+      "distinct_pairs": 64,
+      "distinct_speakers": 64,
+      "gradient_norm_min": 0.22009585797786713,
+      "gradient_norm_max": 0.27351564168930054,
+      "clipped_updates": 0,
+      "oom_retries": 0,
+      "fixed_fitting_pairs": 16,
+      "fixed_fitting_seen_pairs": 3,
+      "fixed_fitting_unseen_pairs": 13,
+      "fixed_fitting_objective": [
+        {
+          "step": 0,
+          "objective": 3.57301127910614,
+          "source_ids": [
+            "broader_teacher_0"
+          ]
+        },
+        {
+          "step": 8,
+          "objective": 3.5723811835050583,
+          "source_ids": [
+            "broader_teacher_8"
+          ]
+        }
+      ],
+      "fitting_cross_run_comparison": false,
+      "teacher_is_diagnostic_not_speech_quality": true,
+      "source_ids": [
+        "broader_teacher_0",
+        "broader_teacher_8",
+        "prior_teacher_0",
+        "prior_teacher_8",
+        "broader_checkpoint8_receipt",
+        "broader_update_1",
+        "broader_update_2",
+        "broader_update_3",
+        "broader_update_4",
+        "broader_update_5",
+        "broader_update_6",
+        "broader_update_7",
+        "broader_update_8",
+        "broader_checkpoint8_independent_audit"
+      ],
+      "update_sha256": {
+        "1": "9f1fa4dbb1b64efb6c8f9bde88140cee8a5243e0f5c028455d993caf31012559",
+        "2": "7dff74f370ea072b9246875ac9fdc161623a219086b53a04cd3e705f2b1cd01a",
+        "3": "ac7921d5c54b918d097fa3db3215cd770876f66efab540fd2e80ea231632e728",
+        "4": "3d289a7df741f8ebd8a50c1fce33d808c5d1ddd4512ec83dd521d974b99cd287",
+        "5": "a223445e39dc8ba847170ed789e9c47442d5b9082e2fe219d590bf770f661a51",
+        "6": "b40fe50f6a59e1166e2f591c86c2e192f33641f79105ce04de1171c0993afcfe",
+        "7": "9f55de4be961ddae811e1d28787541d576c88069abb9a11ed622d02937af6d8c",
+        "8": "fcc8826ebbd76d48c975dc931f104743e1985b0a19708430794b6cd8f253caae"
+      }
+    },
+    "broader_update16": {
+      "status": "training_segment_and_complete80_speech_audit_completed",
+      "step": 16,
+      "checkpoint_sha256": "55e080ea6966324cb4f61ca91c45558f2d52546643b17a5452d6c19cc1bbc4c5",
+      "distinct_pairs": 128,
+      "distinct_speakers": 128,
+      "gradient_norm_min": 0.21403615176677704,
+      "gradient_norm_max": 0.28705722093582153,
+      "clipped_updates": 0,
+      "oom_retries": 0,
+      "fixed_fitting_pairs": 16,
+      "fixed_fitting_seen_pairs": 8,
+      "fixed_fitting_unseen_pairs": 8,
+      "fixed_fitting_objective": [
+        {
+          "step": 0,
+          "objective": 3.57301127910614,
+          "source_ids": [
+            "broader_teacher_0"
+          ]
+        },
+        {
+          "step": 8,
+          "objective": 3.5723811835050583,
+          "source_ids": [
+            "broader_teacher_8"
+          ]
+        },
+        {
+          "step": 16,
+          "objective": 3.5716682970523834,
+          "source_ids": [
+            "broader_teacher_16"
+          ]
+        }
+      ],
+      "fitting_cross_run_comparison": false,
+      "teacher_is_diagnostic_not_speech_quality": true,
+      "source_ids": [
+        "broader_teacher_0",
+        "broader_teacher_8",
+        "prior_teacher_0",
+        "prior_teacher_8",
+        "broader_checkpoint8_receipt",
+        "broader_update_1",
+        "broader_update_2",
+        "broader_update_3",
+        "broader_update_4",
+        "broader_update_5",
+        "broader_update_6",
+        "broader_update_7",
+        "broader_update_8",
+        "broader_teacher_16",
+        "prior_teacher_16",
+        "broader_checkpoint16_receipt",
+        "broader_update_9",
+        "broader_update_10",
+        "broader_update_11",
+        "broader_update_12",
+        "broader_update_13",
+        "broader_update_14",
+        "broader_update_15",
+        "broader_update_16"
+      ],
+      "update_sha256": {
+        "1": "9f1fa4dbb1b64efb6c8f9bde88140cee8a5243e0f5c028455d993caf31012559",
+        "2": "7dff74f370ea072b9246875ac9fdc161623a219086b53a04cd3e705f2b1cd01a",
+        "3": "ac7921d5c54b918d097fa3db3215cd770876f66efab540fd2e80ea231632e728",
+        "4": "3d289a7df741f8ebd8a50c1fce33d808c5d1ddd4512ec83dd521d974b99cd287",
+        "5": "a223445e39dc8ba847170ed789e9c47442d5b9082e2fe219d590bf770f661a51",
+        "6": "b40fe50f6a59e1166e2f591c86c2e192f33641f79105ce04de1171c0993afcfe",
+        "7": "9f55de4be961ddae811e1d28787541d576c88069abb9a11ed622d02937af6d8c",
+        "8": "fcc8826ebbd76d48c975dc931f104743e1985b0a19708430794b6cd8f253caae",
+        "9": "d56c05d5bbc6ece49eb4c80048f2e19b5f5d0897668be55dcadaa6779c203af9",
+        "10": "e132204000668a7e25a4fa530a2e9e2a8c7383971615f02b62773468dc735566",
+        "11": "3a784aa5fabea0942aea3f4446c0010ce5b2ec7ef5f460a9e738520e9475d237",
+        "12": "b728726791ba243293f23ffabb70096041656a944192afb588543a9919e47a57",
+        "13": "2ef2875df8db70603c00085de7ab8de7108d055001fa74f9699b79c0be169a86",
+        "14": "c130bd7deddfb406bd6b91239bde156853fee41d12f7761524cf267600b3ae64",
+        "15": "24aa8921a33d2be35730898e16206e04388a1567e44c26a7db4ca5fbd23c2a17",
+        "16": "09e13b88767f627b95efd03b8e7271cd8d6c4963f1c9702dc6bd411a6b0975af"
+      }
+    }
+  },
+  "next_feature_stage": {
+    "kind": "fresh_broader512_native_features",
+    "status": "completed",
+    "active": false,
+    "results_pending": false,
+    "registered": true,
+    "launched": true,
+    "original_session_id": 45998,
+    "protocol_sha256": "01247c5a5176b0938d57414c4fe248a24531ba83e0acea3b045127083065963e",
+    "assets": 512,
+    "optimizer_updates": 0,
+    "training_launched": false,
+    "training_ready": false,
+    "exit_code": 0,
+    "audit_sha256": "b3ae2ac332ac82f263a1e63c29798993522464e903781324d99c9febdd71e98e",
+    "native_ids_verified": 512,
+    "source_wavs_rehashed": 512,
+    "exact_overlap_tensor_comparisons": 52,
+    "calibration_assets_extracted": 0,
+    "full_codec_speaker_reextraction_in_audit": false
+  },
+  "next_training_preparation": {
+    "kind": "broader_data_only_same32_updates",
+    "status": "running_train_000032",
+    "launched": true,
+    "optimizer_updates": 16,
+    "changes": "Fitting data breadth only; no base-KV intervention selected.",
+    "registered": true,
+    "implementation_review_pending": false,
+    "active": true,
+    "results_pending": true,
+    "registration_scope": "Training and speech protocols registered; native controls and checkpoint 8 complete80 audit passed",
+    "original_session_id": 41410,
+    "inputs_sha256": "fd8a504ab2567e4cecefc6a91e3eb91961329e31db1a501a1f9887a8b882ddec",
+    "quality_result": "checkpoint16_tradeoff_not_qualified",
+    "phase": "train-000032",
+    "planned_phases": [
+      "preflight",
+      "prepare",
+      "initialize_native_controls",
+      "baseline80_reuse_if_verified",
+      "train8_and_fresh80",
+      "train16_and_fresh80",
+      "train32_and_fresh80"
+    ],
+    "memory_preflight_started_confirmed": true,
+    "native_inference_started_confirmed": true,
+    "memory_preflight_passed": true,
+    "completed_phases": [
+      "memory-preflight",
+      "prepare",
+      "speech-prepare",
+      "initialize",
+      "native-controls",
+      "reuse-baseline",
+      "train-000008",
+      "generate-000008",
+      "score-000008",
+      "audit-000008",
+      "train-000016",
+      "generate-000016",
+      "score-000016",
+      "audit-000016"
+    ],
+    "training_protocol_registered": true,
+    "speech_protocol_registered": true,
+    "latest_audited_checkpoint": 16,
+    "positive_checkpoint_audited": true,
+    "native_controls_passed": true,
+    "protocol_sha256": "ab7c2e7da83a76e7da83a9765e015f778f0db4cc0ccf77cfefc1f7968d65f03d",
+    "latest_trained_checkpoint": 16,
+    "checkpoint_sha256": "55e080ea6966324cb4f61ca91c45558f2d52546643b17a5452d6c19cc1bbc4c5"
+  },
+  "conditional_options": {
+    "status": "literature_review_only",
+    "implemented": false,
+    "selected": false,
+    "registered": false,
+    "source_ids": [
+      "conditional_literature_followup"
+    ],
+    "options": [
+      {
+        "priority": 1,
+        "name": "Fresh generated-trajectory joint optimization",
+        "gate": "Only if completed broader-data pilot fails; first establish fitting-only within-context CER/voice variation and sampler replay correctness.",
+        "limitation": "Adjacent architectures/languages; prior fixed-pool DPO failures remain relevant."
+      },
+      {
+        "priority": 2,
+        "name": "Verified pronunciation input",
+        "gate": "Only after qualified Mongolian labels establish recurring audible lexical errors.",
+        "limitation": "UtterTune improved targeted Japanese accent control but worsened general CER; no Mongolian G2P or voice guarantee established."
+      }
+    ]
+  },
+  "conditional_confirmation_preparation": {
+    "status": "prepared_unregistered_ineligible",
+    "registered": false,
+    "launched": false,
+    "eligible": false,
+    "metadata_artifact_tests_passed": 8,
+    "source_ids": [
+      "broader_confirmation_readiness"
+    ],
+    "scope": "Unchanged original114, only after a positive complete80 joint pass and successful parent closure; no confirmation or goal claim."
+  },
+  "conditional_gpu_fitting": {
+    "status": "read_only_feasibility_not_selected",
+    "registered": false,
+    "qualified": false,
+    "launched": false,
+    "source_ids": [
+      "fitting_gpu_feasibility"
+    ],
+    "scope": "A new fitting-only CUDA FP32 rollout backend is plausible but unqualified; unchanged CPU calibration80/original114 gates. No CPU/GPU equivalence or speed benchmark claimed."
+  }
+}

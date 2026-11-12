@@ -1,0 +1,26 @@
+{
+  "method": "lora",
+  "seed": 2026,
+  "rank": 16,
+  "dropout": 0.05,
+  "updates": 17500,
+  "clips_per_update": 16,
+  "start_epoch": 2,
+  "peak_lr": 0.000003,
+  "end_lr": 0.000003,
+  "warmup_updates": 0,
+  "frame_limit": 195,
+  "token_limit": 1024,
+  "eval_every": 100,
+  "patience": 3,
+  "min_delta": 0.002,
+  "non_streaming_only": false,
+  "early_stopping": false,
+  "observability": true,
+  "save_epochs": true,
+  "overfit_guard": {
+    "patience": 5,
+    "validation_delta": 0.005,
+    "training_delta": 0.002
+  }
+}

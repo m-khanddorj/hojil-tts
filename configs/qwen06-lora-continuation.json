@@ -1,0 +1,18 @@
+{
+  "method": "lora",
+  "seed": 2026,
+  "rank": 16,
+  "dropout": 0.05,
+  "updates": 176,
+  "clips_per_update": 16,
+  "start_epoch": 1,
+  "peak_lr": 0.00001,
+  "end_lr": 0.000003,
+  "warmup_updates": 0,
+  "frame_limit": 195,
+  "token_limit": 1024,
+  "eval_every": 44,
+  "patience": 2,
+  "min_delta": 0.002,
+  "non_streaming_only": false
+}
